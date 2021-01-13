@@ -13,9 +13,7 @@ and the official schedule with room information is
 |:-----------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
 | 11-15 jan. |  [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     | TBA
 | 18-22 jan. | TBA   |                                                                              
-      |
 | 25-29 jan. | TBA   | TBA
-      |
                                                                                     
 
 
