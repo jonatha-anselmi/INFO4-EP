@@ -4,9 +4,9 @@
 lectures while [Arnaud Legrand](mailto:arnaud.legrand@imag.fr) and [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@ens-lyon.fr) are in
 charge of practical sessions.
 
-The pad is [here](http://pads.univ-grenoble-alpes.fr/p/INFO4_EP)
-and the official schedule with room information is
-[here](http://redirect.univ-grenoble-alpes.fr/ADE_ETUDIANTS_POLYTECH).
+Here the [pad](http://pads.univ-grenoble-alpes.fr/p/INFO4_EP)
+and the
+[official schedule with room information](http://redirect.univ-grenoble-alpes.fr/ADE_ETUDIANTS_POLYTECH).
 
 
 | Semaine    | Cours (Jeudi, 8h00-9h30)                                                | TD (Vendredi, 11h30-13h00)                                                                |
