@@ -20,7 +20,5 @@ and the official schedule with room information is
 ## [14-01-2021] Lecture 1
 ### Documents
 
-Course content, objectives and organization.
-
-[Material](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_01_intro.pdf)
+Course content, objectives and organization -- [slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_01_intro.pdf)
 
