@@ -14,7 +14,7 @@ and the official schedule with room information is
 | 11-15 jan.  | TBA     | TBA
 | 18-22 jan. | TBA   |                                                                              
 | 25-29 jan. | TBA   | TBA
-|                                                                                    
+                                                                                    
 
 
 ## [14-01-2021] Lecture 1
