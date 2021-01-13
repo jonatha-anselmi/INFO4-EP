@@ -14,7 +14,14 @@ and the official schedule with room information is
 | 11-15 jan. | [JA] [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     | [JA] [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
 | 18-22 jan. | TBA   | Pas de TD                                                                             
 | 25-29 jan. | TBA   | TBA
-                                                                                    
+| 01-05 feb. | TBA   | TBA
+| 08-12 feb. | TBA   | TBA
+| 01-05 mar. | TBA   | TBA
+| 08-12 mar. | TBA   | TBA
+| 15-19 mar.| TBA   | TBA
+| 22-26 mar. | TBA   | TBA
+| 29-02 mar | Pas de cours   | TBA
+                                                                                  
 
 
 ## [14-01-2021] Lecture 1
