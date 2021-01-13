@@ -12,7 +12,7 @@ and the official schedule with room information is
 | Semaine    | Cours (Jeudi, 8h00-9h30)                                                | TD (Vendredi, 11h30-13h00)                                                                |
 |:-----------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
 | 11-15 jan. | [JA] [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     | [JA] [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
-| 18-22 jan. | TBA   |                                                                              
+| 18-22 jan. | TBA   | Pas de TD                                                                             
 | 25-29 jan. | TBA   | TBA
                                                                                     
 
