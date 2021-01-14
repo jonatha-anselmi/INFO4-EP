@@ -99,5 +99,43 @@ practical session.
 The objective is to write together a code in R that simulates the dynamics of a G/G/1 queue and then to use this code to estimate performance metrics such as the average time spent in the system by jobs as a function of the input parameters (e.g., job arrival and service rates).
 
 
+### Modeling and principle of simulation
 
+#### System parameters
+
+- Job arrival rate `lambda` (job/sec)
+- Service rate `mu` (job/sec)
+- Scheduling discipline (we will use FIFO but we will keep the code as general as possible)
+- Number of jobs to simulate `N`
+
+#### Description of state variables:
+
+- Current time `t`
+- Arrival times `Arrival`: computed by job interarrival times (input)
+- Service times `Service` (input)
+- Residual service times `Remaining`: initialized with `NA`, set to `Service` when a job arrives and decreased to zero.
+- Completion times `Completion`: initialized with `NA`, set to the current time `t` when `Remaining` becomes zero.
+- Job in execution `CurrClient`: initialized with `NA`
+
+The variable `NextArrival` may be convenient to use to get a simpler code. This variable is initially set to one and increased by one without exceeding the overall number of jobs to simulate `N`.
+
+#### System evolution
+
+Either an arrival or a service completion occurs
+
+#### Code structure
+
+``` R
+while(T) {
+    dtA = ...  # temps jusqu'à la prochaine arrivée
+    dtC = ...  # temps jusqu'à la prochaine terminaison
+    if(is.na(dtA) & is.na(dtC)) {break;}
+    dt = min(dtA,dtC)
+    # Mettre à jour comme il faut.
+}
+```
+
+#### Objective
+- To have a working code
+- To plot the average response time as a function of the arrival rate `lambda`. Here, we assume that service times are exponentially distributed with rate one and that interarrival times are exponentially distributed with rate `lambda`. Also, `N=10`.
 
