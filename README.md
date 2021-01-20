@@ -25,7 +25,6 @@ and the
 
 
 ## [14-01-2021] Lecture 1
-### Documents
 
 Course content, objectives and organization; Queueing problems -- [slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_01_intro.pdf)
 
@@ -146,6 +145,5 @@ Link to [code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd). P
 
 
 ## [21-01-2021] Lecture 2
-### Documents
 
 Kendall's notation; GI/GI/1 queue: Lindley's equation and stability; Little's law -- [slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)
