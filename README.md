@@ -137,5 +137,10 @@ while(T) {
 
 #### Objective
 - To have a working code
-- To plot the average response time as a function of the arrival rate `lambda`. Here, we assume that service times are exponentially distributed with rate one and that interarrival times are exponentially distributed with rate `lambda`. Also, `N=10`.
+- To plot the average response time as a function of the arrival rate `lambda`. Here, we assume that service times are exponentially distributed with rate one and that interarrival times are exponentially distributed with rate `lambda`. Also, `N=10000`.
 
+
+#### Code
+
+Link to [code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd)
+Plotting the mean response time as a function of `lambda`, what conclusion can you make?
