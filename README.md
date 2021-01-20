@@ -14,7 +14,7 @@ and the
 | 11-15 jan. | [JA] [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     | [JA] [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
 | 18-22 jan. | [JA] [GI/GI/1 queue and Little's law](#21-01-2021-lecture-2)   | Pas de TD                                                                         
 | 25-29 jan. | [JA] Discrete Time Markov chains   | [LSR] Page Rank
-| 01-05 feb. | TBA   | [LSR] Cache Web
+| 01-05 feb. | [JA] TBA  | [LSR] Cache Web
 | 08-12 feb. | TBA   | [LSR] Aloha
 | 01-05 mar. | TBA   | TBA
 | 08-12 mar. | TBA   | TBA
