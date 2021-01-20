@@ -12,7 +12,7 @@ and the
 | Semaine    | Cours (Jeudi, 8h00-9h30)                                                | TD (Vendredi, 11h30-13h00)                                                                |
 |:-----------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
 | 11-15 jan. | [JA] [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     | [JA] [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
-| 18-22 jan. | [JA] The GI/GI/1 queue and Little's law   | Pas de TD                                                                         
+| 18-22 jan. | [JA] [GI/GI/1 queue and Little's law](#14-01-2021-lecture-1)   | Pas de TD                                                                         
 | 25-29 jan. | [JA] Discrete Time Markov chains   | [LSR] Page Rank
 | 01-05 feb. | TBA   | [LSR] Cache Web
 | 08-12 feb. | TBA   | [LSR] Aloha
@@ -148,4 +148,4 @@ Link to [code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd). P
 ## [21-01-2021] Lecture 2
 ### Documents
 
-Kendall's notation; G/G/1 queue: Lindley's equation and stability; Little's law -- [slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)
+Kendall's notation; GI/GI/1 queue: Lindley's equation and stability; Little's law -- [slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)
