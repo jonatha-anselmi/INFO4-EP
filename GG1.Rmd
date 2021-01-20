@@ -1,0 +1,74 @@
+---
+title: "GG1_queue"
+output: html_document
+---
+# Simulation of G/G/1 queues
+
+This code simulates the behavior of a M/M/1 queue with the FIFO discipline. However, mutatis mutandis, it can be easily changed to simulate the dynamics of a G/G/1 queue with an arbitrary scheduling discipline.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+set.seed(17); # Set seed for reproducibility
+N = 1e4; # number of jobs to simulate;
+
+lambda = 0.5; # arrival rate
+mu = 1; # service rate
+
+Arrival = cumsum(rexp(n=N, rate = lambda)); # Arrival times
+Service = rexp(N,rate=1/mu); # Service times
+Remaining = rep(N, x=NA);    # Remaining service times of each job
+Completion = rep(N, x=NA);   # Completion time of each job
+
+t = 0; # simulation time
+
+CurrentTask = NA;
+NextArrival = 1;
+while (TRUE) {
+    # print(t);
+    # print(Arrival);
+    # print(Service);
+    # print(Remaining);
+    dtA = NA;
+    dtC = NA;
+    if(length(Arrival[Arrival>t])>0) { # if an arrival exists after t
+        dtA = head(Arrival[Arrival>t],n=1)-t ; # time to next arrival
+    }
+    if(!is.na(CurrentTask)) { # if a task is running
+        dtC = Remaining[CurrentTask]; # time to next completion
+    }
+    if(is.na(dtA) & is.na(dtC)) {
+        break;
+    } 
+
+    dt = min(dtA,dtC,na.rm=T);
+
+    # update system variables
+    t = t + dt;
+    if((NextArrival <=N) & (Arrival[NextArrival] == t)) {
+        Remaining[NextArrival] = Service[NextArrival];
+        NextArrival = NextArrival + 1;
+    }
+    if(!is.na(CurrentTask)) {
+        Remaining[CurrentTask] = Remaining[CurrentTask] - dt ;
+        if(Remaining[CurrentTask] <= 0) {
+            Completion[CurrentTask] = t;
+            Remaining[CurrentTask] = NA;
+        }
+        CurrentTask = NA;
+    }
+    # FIFO scheduling discipline. Change here to implement other scheduling disciplines
+    WaitingList=(1:NextArrival)[!is.na(Remaining)]; # Optimize this line!
+    if(length(WaitingList)>0) {
+        CurrentTask = head(WaitingList,n=1);
+    }
+}
+
+ResponseTime = mean(Completion-Arrival); #average response time
+
+print(ResponseTime); 
+
+# Make a plot of the ResponseTime as a function of lambda.
+
+```
+
