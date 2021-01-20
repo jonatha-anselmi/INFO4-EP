@@ -142,5 +142,4 @@ while(T) {
 
 #### Code
 
-Link to [code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd)
-Plotting the mean response time as a function of `lambda`, what conclusion can you make?
+Link to [code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd). Plotting the mean response time as a function of `lambda`, what conclusion can you make?
