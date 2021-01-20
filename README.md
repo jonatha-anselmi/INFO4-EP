@@ -151,7 +151,7 @@ Kendall's notation; GI/GI/1 queue: Lindley's equation and stability; Little's la
 ### Assignments
 
 - Use the code that simulates a [G/G/1/FIFO queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd) to verify that stability is indeed obtained if and only if the arrival rate is smaller than the service rate.
-- Modify the [G/G/1/FIFO queue code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd) to implement a G/G/1/LIFO queue (LIFO = Last-In-First-Out). Does the stablity region change?
+- Modify the [G/G/1/FIFO code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd) to implement a G/G/1/LIFO queue (LIFO = Last-In-First-Out). Does the stablity region change?
 
 
 
