@@ -147,3 +147,11 @@ Link to [code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd). P
 ## [21-01-2021] Lecture 2
 
 Kendall's notation; GI/GI/1 queue: Lindley's equation and stability; Little's law -- [slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)
+
+### Assignments
+
+- Use the code that simulates a [G/G/1 queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd) to verify that stability is indeed obtained if and only if the arrival rate is smaller than the service rate.
+- Modify the [G/G/1 queue code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd) to implement a G/G/1 queue with the Last-In-First-Out scheduling discipline. Does the stablity region change?
+
+
+
