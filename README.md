@@ -18,7 +18,7 @@ and the
 | 08-12 feb. | TBA   | [LSR] Aloha
 | 01-05 mar. | TBA   | TBA
 | 08-12 mar. | TBA   | TBA
-| 15-19 mar.| TBA   | TBA
+| 15-19 mar.| TBA   | [LSR] Exercises on queues
 | 22-26 mar. | TBA   | TBA
 | 29-02 mar | Pas de cours   | TBA
                                                                                   
