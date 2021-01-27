@@ -1,7 +1,7 @@
 # INFO4-EP: Évaluation de Performance
 
 [Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) is in charge of the
-lectures while [Arnaud Legrand](mailto:arnaud.legrand@imag.fr) and [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@ens-lyon.fr) are in
+lectures while [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@ens-lyon.fr) is in
 charge of practical sessions.
 
 Here the [pad](http://pads.univ-grenoble-alpes.fr/p/INFO4_EP)
@@ -12,11 +12,11 @@ and the
 | Semaine    | Cours (Jeudi, 8h00-9h30)                                                | TD (Vendredi, 11h30-13h00)                                                                |
 |:-----------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
 | 11-15 jan. | [JA] [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     | [JA] [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
-| 18-22 jan. | [JA] [GI/GI/1 queue and Little's law](#21-01-2021-lecture-2)   | Pas de TD                                                                         
-| 25-29 jan. | [JA] Discrete Time Markov chains   | [LSR] Page Rank
-| 01-05 feb. | [JA] TBA  | [LSR] Cache Web
-| 08-12 feb. | TBA   | [LSR] Aloha
-| 01-05 mar. | TBA   | TBA
+| 18-22 jan. | [JA] [The GI/GI/1 queue](#21-01-2021-lecture-2)   | Pas de TD                                                                         
+| 25-29 jan. | [JA] [Little's law and Intro to Discrete Time Markov Chains](#28-01-2021-lecture-3)   | [JA] [Exercises on DTMC](#29-01-2021-practical-session-2)
+| 01-05 feb. | [JA] TBA  | [LSR] Page Rank
+| 08-12 feb. | TBA   | [LSR] Cache Web
+| 01-05 mar. | TBA   | [LSR] Aloha
 | 08-12 mar. | TBA   | TBA
 | 15-19 mar.| TBA   | [LSR] Exercises on queues
 | 22-26 mar. | TBA   | TBA
@@ -154,4 +154,8 @@ Kendall's notation; GI/GI/1 queue: Lindley's equation and stability; Little's la
 - Modify the [G/G/1/FIFO code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd) to implement a G/G/1/LIFO queue (LIFO = Last-In-First-Out). Does the stablity region change?
 
 
+## [28-01-2021] Lecture 3
 
+Little's law -- [slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)
+
+DTMC -- -- [slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf)
