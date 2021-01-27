@@ -11,10 +11,10 @@ and the
 
 | Semaine    | Cours (Jeudi, 8h00-9h30)                                                | TD (Vendredi, 11h30-13h00)                                                                |
 |:-----------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
-| 11-15 jan. | [JA] [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     | [JA] [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
-| 18-22 jan. | [JA] [The GI/GI/1 queue](#21-01-2021-lecture-2)   | Pas de TD                                                                         
-| 25-29 jan. | [JA] [Little's law and Intro to Discrete Time Markov Chains](#28-01-2021-lecture-3)   | [JA] [Exercises on DTMC](#29-01-2021-practical-session-2)
-| 01-05 feb. | [JA] TBA  | [LSR] Page Rank
+| 11-15 jan. | [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     |  [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
+| 18-22 jan. | [The GI/GI/1 queue](#21-01-2021-lecture-2)   | Pas de TD                                                                         
+| 25-29 jan. | [Little's law and Intro to Discrete Time Markov Chains](#28-01-2021-lecture-3)   | [Exercises on DTMC](#29-01-2021-practical-session-2)
+| 01-05 feb. | TBA  | [LSR] Page Rank
 | 08-12 feb. | TBA   | [LSR] Cache Web
 | 01-05 mar. | TBA   | [LSR] Aloha
 | 08-12 mar. | TBA   | TBA
