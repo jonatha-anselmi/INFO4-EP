@@ -15,7 +15,7 @@ and the
 | 18-22 jan. | [The GI/GI/1 queue](#21-01-2021-lecture-2)   | Pas de TD                                                                         
 | 25-29 jan. | [Little's law and Intro to Discrete Time Markov Chains](#28-01-2021-lecture-3)   | [Exercises on DTMC](#29-01-2021-practical-session-2)
 | 01-05 feb. | [Discrete Time Markov Chains](#04-02-2021-lecture-4)  | [LSR] Cache
-| 08-12 feb. | TBA   | [LSR] Aloha
+| 08-12 feb. | [Poisson Process](#11-02-2021-lecture-5)   | [LSR] Aloha
 | 01-05 mar. | TBA   | [LSR] Page Rank
 | 08-12 mar. | TBA   | TBA
 | 15-19 mar.| TBA   | [LSR] Exercises on queues
@@ -168,3 +168,7 @@ The student knows how to model simple systems by means of CMTD, construct the un
 [DTMC](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf)
 The student knows the conditions that guarantee the existence of a stationary distribution and has learnt how to write the global balance equations.
 
+## [11-02-2021] Lecture 5
+
+[Poisson Process](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
+The student knows the basic properties of the Poisson process: definitions and equivalent characterizations, connection with the uniform distribution, thinning, superposition.
