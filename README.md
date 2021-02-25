@@ -16,7 +16,7 @@ and the
 | 25-29 jan. | [Little's law and Intro to Discrete Time Markov Chains](#28-01-2021-lecture-3)   | [Exercises on DTMC](#29-01-2021-practical-session-2)
 | 01-05 feb. | [Discrete Time Markov Chains](#04-02-2021-lecture-4)  | [LSR] Cache
 | 08-12 feb. | [Poisson Process](#11-02-2021-lecture-5)   | [LSR] Aloha
-| 22-26 mar. | TBA   | TBA
+| 22-26 mar. | [Continuous Time Markov Chains](#25-02-2021-lecture-6)   | [Presentation of DM + Exercises CTMC](#26-02-2021-practical-session-5)
 | 01-05 mar. | TBA   | [LSR] Page Rank
 | 08-12 mar. | TBA   | TBA
 | 15-19 mar.| TBA   | [LSR] Exercises on queues
@@ -161,7 +161,7 @@ Kendall's notation; GI/GI/1 queue: Lindley's equation and stability; Little's la
 The student knows how to apply Little's law to a queueing system by looking at the workload process and the number of jobs.
 
 [DTMC](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf):
-The student knows how to model simple systems by means of CMTD, construct the underlying a graph and transition matrix.
+The student knows how to model simple systems by means of CMTD, construct the underlying a graph and transition probability matrix.
 
 
 ## [04-02-2021] Lecture 4
@@ -173,3 +173,14 @@ The student knows the conditions that guarantee the existence of a stationary di
 
 [Poisson Process](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
 The student knows the basic properties of the Poisson process: definitions and equivalent characterizations, connection with the uniform distribution, thinning, superposition.
+
+## [25-02-2021] Lecture 6
+
+[Continuous Time Markov Chains](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
+The student knows how to model simple systems by means of CTMC, construct the underlying a graph and transition rate matrix, and solve the global balance (or equilibrium) equations under the appropriate hypotheses.
+
+
+## [26-02-2021] Practical Session 5
+
+Presentation of the homework assignments: [all the details](https://rpubs.com/janselmi/LBDM).
+
