@@ -17,7 +17,7 @@ and the
 | 01-05 feb. | [Discrete Time Markov Chains](#04-02-2021-lecture-4)  | [LSR] Cache
 | 08-12 feb. | [Poisson Process](#11-02-2021-lecture-5)   | [LSR] Aloha
 | 22-26 mar. | [Continuous Time Markov Chains](#25-02-2021-lecture-6)   | [Presentation of DM + Exercises CTMC](#26-02-2021-practical-session-5)
-| 01-05 mar. | TBA   | [LSR] Page Rank
+| 01-05 mar. | TBA   | [LSR] Aloha (end)
 | 08-12 mar. | TBA   | TBA
 | 15-19 mar.| TBA   | [LSR] Exercises on queues
 | 22-26 mar. | TBA   | TBA
