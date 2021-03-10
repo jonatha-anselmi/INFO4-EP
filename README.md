@@ -17,8 +17,8 @@ and the
 | 01-05 feb. | [Discrete Time Markov Chains](#04-02-2021-lecture-4)  | [LSR] Cache
 | 08-12 feb. | [Poisson Process](#11-02-2021-lecture-5)   | [LSR] Aloha
 | 22-26 mar. | [Continuous Time Markov Chains](#25-02-2021-lecture-6)   | [Presentation of DM + Exercises CTMC](#26-02-2021-practical-session-5)
-| 01-05 mar. | TBA   | [LSR] Aloha (end)
-| 08-12 mar. | TBA   | TBA
+| 01-05 mar. | [Continuous Time Markov Chains](#04-03-2021-lecture-7)   | [LSR] Aloha (end)
+| 08-12 mar. | [Classic Queues](#11-03-2021-lecture-8)   | [Simulation of Classic Queues](#12-03-2021-practical-session-7)
 | 15-19 mar.| TBA   | [LSR] Exercises on queues
 | 22-26 mar. | TBA   | TBA
 | 29-02 mar | Pas de cours   | TBA
@@ -183,4 +183,19 @@ The student knows how to model simple systems by means of CTMC, construct the un
 ## [26-02-2021] Practical Session 5
 
 Presentation of the homework assignments: [all the details](https://rpubs.com/janselmi/LBDM).
+
+## [25-02-2021] Lecture 7
+
+[Continuous Time Markov Chains](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
+The student knows how to model simple queueing systems by means of CTMC: M/M/1, two M/M/1 in parallel, two M/M/1 in series, Engset (or Ehrenfest) model.
+
+## [25-02-2021] Lecture 8
+
+[Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
+The student knows how to find analytically the stationary distributions associated to classic queueing systems. Specifically, M/M/1, M/M/1/K, M/M/K, M/M/K/K.
+
+## [26-02-2021] Practical Session 7
+
+The student knows how to simulate classic queueing systems in R.
+
 
