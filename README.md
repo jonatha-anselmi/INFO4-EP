@@ -184,17 +184,17 @@ The student knows how to model simple systems by means of CTMC, construct the un
 
 Presentation of the homework assignments: [all the details](https://rpubs.com/janselmi/LBDM).
 
-## [25-02-2021] Lecture 7
+## [04-03-2021] Lecture 7
 
 [Continuous Time Markov Chains](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
 The student knows how to model simple queueing systems by means of CTMC: M/M/1, two M/M/1 in parallel, two M/M/1 in series, Engset (or Ehrenfest) model.
 
-## [25-02-2021] Lecture 8
+## [11-03-2021] Lecture 8
 
 [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
 The student knows how to find analytically the stationary distributions associated to classic queueing systems. Specifically, M/M/1, M/M/1/K, M/M/K, M/M/K/K.
 
-## [26-02-2021] Practical Session 7
+## [12-03-2021] Practical Session 7
 
 The student knows how to simulate classic queueing systems in R.
 
