@@ -1,0 +1,81 @@
+---
+title: "EP2021-TD-MMKK"
+author: "Jonatha Anselmi"
+date: "March 12, 2021"
+output: html_document
+---
+
+---
+title: "Simulation of a M/M/K/K queue"
+author: "Jonatha Anselmi"
+date: "January 15, 2021"
+output: html_document
+---
+
+This code simulates the continuous time Markov chain associated to a M/M/K/K queue and prints the proportion of time where all servers are occupied (the blocking probability). This is compared with the one obtained by the Erlang B formula.
+
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+set.seed(17); # Set seed for reproducibility
+N=1e5; # number of events to simulate;
+
+K=10;         # number of servers
+lambda=0.6*K; # arrival rate
+mu=1;         # service rate
+
+p_blocking=0; # blocking probability
+p_blocking_transient=rep(N, 0); # transient blocking probability
+T=0; # simulation time
+
+state=0;
+
+for (i in 1:N) {
+
+  U=lambda+state*mu;
+  time_in_state=rexp(1,U)
+  T=T+time_in_state;
+
+  if (state==K) {
+    # For the moment, let us find the overall time spent in state K
+    p_blocking=p_blocking+time_in_state;
+  }
+
+  p_blocking_transient[i]=p_blocking/T;
+
+  if (runif(1)<lambda/U){
+      # An arrival occurred
+      if (state<K){
+        # The incoming job has room so it is accepted
+        state=state+1;
+      }
+  } else {
+      # A departure occurred
+      state=state-1;    
+  }
+}
+
+# The blocking probability by simulation
+p_blocking=p_blocking/T;
+
+# The blocking probability by theory (The Erlang B formula)
+p_blocking_theory=0; 
+normalizing_constant=0;
+for (i in 0:K){
+  normalizing_constant = normalizing_constant + (lambda/mu)**i / factorial(i);
+}
+
+p_blocking_theory = (lambda/mu)**K / factorial(K);
+p_blocking_theory = p_blocking_theory / normalizing_constant;
+
+
+# Print the blocking probabilities (simulation and theory)
+events=1:N;
+plot(events, p_blocking_transient, type = "l", lty = 1)
+abline(h = p_blocking_theory, col="red")
+print(p_blocking)
+print(p_blocking_theory)
+
+```
+
