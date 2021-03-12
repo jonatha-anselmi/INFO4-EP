@@ -18,7 +18,7 @@ and the
 | 08-12 feb. | [Poisson Process](#11-02-2021-lecture-5)   | [LSR] Aloha
 | 22-26 mar. | [Continuous Time Markov Chains](#25-02-2021-lecture-6)   | [Presentation of DM + Exercises CTMC](#26-02-2021-practical-session-5)
 | 01-05 mar. | [Continuous Time Markov Chains](#04-03-2021-lecture-7)   | [LSR] Aloha (end)
-| 08-12 mar. | [Classic Queues](#11-03-2021-lecture-8)   | [Simulation of Classic Queues](#12-03-2021-practical-session-7)
+| 08-12 mar. | [Classic Queues](#11-03-2021-lecture-8)   | [Simulation of the M/M/K/K queue in R](#12-03-2021-practical-session-7)
 | 15-19 mar.| TBA   | [LSR] Exercises on queues
 | 22-26 mar. | TBA   | TBA
 | 29-02 mar | Pas de cours   | TBA
@@ -192,10 +192,12 @@ The student knows how to model simple queueing systems by means of CTMC: M/M/1, 
 ## [11-03-2021] Lecture 8
 
 [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
-The student knows how to find analytically the stationary distributions associated to classic queueing systems. Specifically, M/M/1, M/M/1/K, M/M/K, M/M/K/K.
+The student knows how to find analytically the stationary distributions associated to classic queueing systems. Specifically, M/M/1, M/M/1/K, M/M/&#8734;
+, M/M/K/K.
 
 ## [12-03-2021] Practical Session 7
 
 The student knows how to simulate classic queueing systems in R.
 
+[Simulation code for the M/M/K/K queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/MMKK.Rmd), and link on [[rpubs](https://rpubs.com/janselmi/MMKK)].
 
