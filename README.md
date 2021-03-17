@@ -19,7 +19,7 @@ and the
 | 22-26 mar. | [Continuous Time Markov Chains](#25-02-2021-lecture-6)   | [Presentation of DM + Exercises CTMC](#26-02-2021-practical-session-5)
 | 01-05 mar. | [Continuous Time Markov Chains](#04-03-2021-lecture-7)   | [LSR] Aloha (end)
 | 08-12 mar. | [Classic Queues](#11-03-2021-lecture-8)   | [Simulation of the M/M/K/K queue in R](#12-03-2021-practical-session-7)
-| 15-19 mar.| TBA   | [LSR] Exercises on queues
+| 15-19 mar.| The M/G/1 queue   | [LSR] TBA
 | 22-26 mar. | TBA   | TBA
 | 29-02 mar | Pas de cours   | TBA
                                                                                   
