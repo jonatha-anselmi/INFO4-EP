@@ -20,7 +20,7 @@ and the
 | 01-05 mar. | [Continuous Time Markov Chains](#04-03-2021-lecture-7)   | [LSR] Aloha (end)
 | 08-12 mar. | [Classic Queues](#11-03-2021-lecture-8)   | [Simulation of the M/M/K/K queue in R](#12-03-2021-practical-session-7)
 | 15-19 mar.| The M/G/1 queue   | [LSR] TBA
-| 22-26 mar. | TBA   | TBA
+| 22-26 mar. | [Jackson Queueing Networks](#25-03-2021-lecture-10)   | [Performance Eval. and Opt. of a webapp](#26-03-2021-practical-session-9)
 | 29-02 mar | Pas de cours   | TBA
                                                                                   
 
@@ -199,5 +199,17 @@ The student knows how to find analytically the stationary distributions associat
 
 The student knows how to simulate classic queueing systems in R.
 
-[Simulation code for the M/M/K/K queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/MMKK.Rmd), and link on [[rpubs](https://rpubs.com/janselmi/MMKK)].
+[Simulation code for the M/M/K/K queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/MMKK.Rmd), and [[link on rpubs](https://rpubs.com/janselmi/MMKK)].
 
+
+## [25-03-2021] Lecture 9
+
+
+## [25-03-2021] Lecture 10
+
+Jackson Queueing Networks; Jackson's theorem, product form, and computation of performance measures.
+[slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf).
+
+## [26-03-2021] Practical Session 9
+
+Performance Evaluation and Optimization of a web application; theory and simulation; [[link on rpubs](https://rpubs.com/janselmi/webapp)].
