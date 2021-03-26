@@ -207,9 +207,10 @@ The student knows how to simulate classic queueing systems in R.
 
 ## [25-03-2021] Lecture 10
 
-Jackson Queueing Networks; Jackson's theorem, product form, and computation of performance measures
+Jackson queueing networks; identification of the underlying continuous time Markov chain; global balance equations; Jackson's theorem and product form; and computation of performance measures of interest such as the overall mean response time
 [[slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)].
+
 
 ## [26-03-2021] Practical Session 9
 
-Performance Evaluation and Optimization of a web application; theory and simulation; [[link on rpubs](https://rpubs.com/janselmi/webapp)].
+Performance Evaluation and Optimization of a web application; theory and simulation; all the details on [[rpubs](https://rpubs.com/janselmi/webapp)].
