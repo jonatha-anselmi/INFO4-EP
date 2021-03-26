@@ -207,8 +207,8 @@ The student knows how to simulate classic queueing systems in R.
 
 ## [25-03-2021] Lecture 10
 
-Jackson Queueing Networks; Jackson's theorem, product form, and computation of performance measures.
-[slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf).
+Jackson Queueing Networks; Jackson's theorem, product form, and computation of performance measures
+[[slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)].
 
 ## [26-03-2021] Practical Session 9
 
