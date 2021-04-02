@@ -21,7 +21,7 @@ and the
 | 08-12 mar. | [Classic Queues](#11-03-2021-lecture-8)   | [Simulation of the M/M/K/K queue in R](#12-03-2021-practical-session-7)
 | 15-19 mar.| The M/G/1 queue   | [LSR] TBA
 | 22-26 mar. | [Jackson Queueing Networks](#25-03-2021-lecture-10)   | [Performance Evaluation and Optimization of a Web Application](#26-03-2021-practical-session-9)
-| 29-02 mar | Pas de cours   | TBA
+| 29-02 mar | Pas de cours   | [Quick](#02-04-2021-practical-session-10)
                                                                                   
 
 
@@ -214,3 +214,8 @@ Jackson queueing networks; identification of the underlying continuous time Mark
 ## [26-03-2021] Practical Session 9
 
 Performance Evaluation and Optimization of a web application; theory and simulation; all the details on [[rpubs](https://rpubs.com/janselmi/webapp)].
+
+## [02-04-2021] Practical Session 10
+
+Correction to [Quick](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/quick_2020_Exam_18.pdf)
+
