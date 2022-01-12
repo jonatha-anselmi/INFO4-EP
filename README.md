@@ -11,17 +11,17 @@ and the
 
 | Semaine    | Cours (Jeudi, 9h45-11h15)                                                | TD (Vendredi, 11h30-13h00)                                                                |
 |:-----------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
-| 11-15 jan. | [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     |  [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
-| 18-22 jan. | [The GI/GI/1 queue](#21-01-2021-lecture-2)   | Pas de TD                                                                         
-| 25-29 jan. | [Little's law and Intro to Discrete Time Markov Chains](#28-01-2021-lecture-3)   | [Exercises on DTMC](#29-01-2021-practical-session-2)
-| 01-05 feb. | [Discrete Time Markov Chains](#04-02-2021-lecture-4)  | [LSR] [Cache](https://github.com/jonatha-anselmi/INFO4-EP/files/6263531/TD7-Memoire-Paginee.pdf) et [Corrigé](https://github.com/jonatha-anselmi/INFO4-EP/files/6263518/Corrige.TD.Pagination.pdf)
-| 08-12 feb. | [Poisson Process](#11-02-2021-lecture-5)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
-| 22-26 mar. | [Continuous Time Markov Chains](#25-02-2021-lecture-6)   | [Presentation of DM + Exercises CTMC](#26-02-2021-practical-session-5)
-| 01-05 mar. | [Continuous Time Markov Chains](#04-03-2021-lecture-7)   | [LSR] Aloha (end) / [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263539/Aloha.elements.de.corection.pdf)
-| 08-12 mar. | [Classic Queues](#11-03-2021-lecture-8)   | [Simulation of the M/M/K/K queue in R](#12-03-2021-practical-session-7)
-| 15-19 mar.| The M/G/1 queue   | [LSR] [TD Page Rank.pdf](https://github.com/jonatha-anselmi/INFO4-EP/files/6263543/TD.Page.Rank.pdf) et [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263545/Elements.de.correction.Page.Rank.pdf)
-| 22-26 mar. | [Jackson Queueing Networks](#25-03-2021-lecture-10)   | [Performance Evaluation and Optimization of a Web Application](#26-03-2021-practical-session-9)
-| 29-02 mar | Pas de cours   | [Quick](#02-04-2021-practical-session-10)
+| 10-14 jan. | [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     |  [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
+| 17-21 jan. | [The GI/GI/1 queue](#21-01-2021-lecture-2)   | Pas de TD                                                                         
+| 24-28 jan. | [Little's law and Intro to Discrete Time Markov Chains](#28-01-2021-lecture-3)   | [Exercises on DTMC](#29-01-2021-practical-session-2)
+| 01-04 feb. | [Discrete Time Markov Chains](#04-02-2021-lecture-4)  | [LSR] [Cache](https://github.com/jonatha-anselmi/INFO4-EP/files/6263531/TD7-Memoire-Paginee.pdf) et [Corrigé](https://github.com/jonatha-anselmi/INFO4-EP/files/6263518/Corrige.TD.Pagination.pdf)
+| 07-11 feb. | [Poisson Process](#11-02-2021-lecture-5)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
+| 14-18 feb. | [Continuous Time Markov Chains](#25-02-2021-lecture-6)   | [Presentation of DM + Exercises CTMC](#26-02-2021-practical-session-5)
+| 28-04 feb. | [Continuous Time Markov Chains](#04-03-2021-lecture-7)   | [LSR] Aloha (end) / [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263539/Aloha.elements.de.corection.pdf)
+| 07-11 mar. | [Classic Queues](#11-03-2021-lecture-8)   | [Simulation of the M/M/K/K queue in R](#12-03-2021-practical-session-7)
+| 14-18 mar.| The M/G/1 queue   | [LSR] [TD Page Rank.pdf](https://github.com/jonatha-anselmi/INFO4-EP/files/6263543/TD.Page.Rank.pdf) et [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263545/Elements.de.correction.Page.Rank.pdf)
+| 21-25 mar. | [Jackson Queueing Networks](#25-03-2021-lecture-10)   | [Performance Evaluation and Optimization of a Web Application](#26-03-2021-practical-session-9)
+| 28-01 mar | Pas de cours   | [Quick](#02-04-2021-practical-session-10)
                                                                                   
 
 
