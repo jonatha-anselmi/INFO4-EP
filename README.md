@@ -1,11 +1,12 @@
-# INFO4-EP: Évaluation de Performance
+# INFO4-EP: Évaluation de Performances
 
-Welcome to the course "Évaluation de Performance" edition 2021/2022!
+Welcome to the course "Évaluation de Performances" edition 2021/2022!
 
 [Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) is in charge of the
-lectures while [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@ens-lyon.fr) is in
+lectures while [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@univ-grenoble-alpes.fr) is in
 charge of practical sessions.
 
+## Course content and planning
 
 | Semaine    | Cours (Jeudi, 9h45-11h15)                                                | TD (Vendredi, 11h30-13h00)                                                                |
 |:-----------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
