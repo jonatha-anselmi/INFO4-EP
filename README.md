@@ -1,12 +1,10 @@
 # INFO4-EP: Évaluation de Performance
 
+Welcome to the course "Évaluation de Performance" edition 2021/2022!
+
 [Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) is in charge of the
 lectures while [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@ens-lyon.fr) is in
 charge of practical sessions.
-
-Here the [pad](http://pads.univ-grenoble-alpes.fr/p/INFO4_EP)
-and the
-[official schedule with room information](http://redirect.univ-grenoble-alpes.fr/ADE_ETUDIANTS_POLYTECH).
 
 
 | Semaine    | Cours (Jeudi, 9h45-11h15)                                                | TD (Vendredi, 11h30-13h00)                                                                |
