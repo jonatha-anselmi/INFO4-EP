@@ -9,7 +9,7 @@ and the
 [official schedule with room information](http://redirect.univ-grenoble-alpes.fr/ADE_ETUDIANTS_POLYTECH).
 
 
-| Semaine    | Cours (Jeudi, 8h00-9h30)                                                | TD (Vendredi, 11h30-13h00)                                                                |
+| Semaine    | Cours (Jeudi, 9h45-11h15)                                                | TD (Vendredi, 11h30-13h00)                                                                |
 |:-----------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
 | 11-15 jan. | [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     |  [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
 | 18-22 jan. | [The GI/GI/1 queue](#21-01-2021-lecture-2)   | Pas de TD                                                                         
