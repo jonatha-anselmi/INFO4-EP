@@ -1,0 +1,193 @@
+---
+title: "File d'attente M/G/1"
+author: "Arnaud Legrand"
+date: "1/28/2022"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r}
+set.seed(45) # Just to make the following computations deterministic and reproducible
+```
+# A short introduction to R and ggplot
+## R basis
+Vectors in R are cool. Here are a few examples of how to build and manipulate them. See, no need for `for` loops.
+```{r}
+x=c(1:5, -12, 17, seq(from=-3, to=8, by = 1.7))
+x>3
+x[x>3]
+which(x>3)
+5 %in% x
+log(x^2)+4
+```
+
+Data frames are even cooler. First a few useful functions to inspect a data frame:
+```{r}
+names(mtcars)
+str(mtcars)
+summary(mtcars)
+dim(mtcars)
+nrow(mtcars)
+ncol(mtcars)
+```
+
+Then a few useful functions to build one:
+```{r}
+df = data.frame() # empty data frame
+N = 4
+df1 = data.frame(x=1:N, y=rnorm(n = N), z = runif(n = N), t = c(TRUE,FALSE), val = "A")
+df2 = data.frame(x=1:N, y=rnorm(n = N), z = runif(n = N), t = c(TRUE,FALSE), val = "B")
+df = rbind(df1,df2)
+df
+```
+And finally a few examples of how to manipulate them:
+```{r}
+mtcars$cyl = as.factor(mtcars$cyl) # Making sur the type of your data is correct is in general a good idea
+str(mtcars$cyl)
+mtcars$val = sqrt(mtcars$mpg + mtcars$qsec) # adding a new column
+# 3 different ways to access the same data, which one do you prefer ?
+mtcars[3,5]
+mtcars[3,"drat"]
+mtcars$drat[3]
+# 2 different ways to extract particular rows and columns
+mtcars[mtcars$cyl==4,names(mtcars) %in% c("hp","mpg","cyl")]
+mtcars[mtcars$cyl==4,c("hp","mpg","cyl")]
+```
+
+## A short introduction to ggplot
+For a short step-by-step introduction, you may like: https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html#1
+```{r}
+mtcars
+```
+
+```{r}
+library(ggplot2)
+ggplot(data = mtcars, aes(x = disp, y = wt, color = as.factor(cyl),
+                                 size = hp, shape = factor(vs))) + geom_point() + theme_bw() +
+    geom_line() + facet_wrap(~as.factor(cyl))
+
+```
+
+```{r}
+library(ggplot2)
+ggplot(data = mtcars, aes(x = disp, y = wt, color = as.factor(cyl))) + geom_point() + theme_bw() +
+    geom_smooth(method="lm")
+
+```
+
+# Simulation of G/G/1 queues
+
+This code simulates the behavior of a M/M/1 queue with the FIFO discipline. However, mutatis mutandis, it can be easily changed to simulate the dynamics of a G/G/1 queue with an arbitrary scheduling discipline. The main modificaction compared to the code written last week was to wrap it in a function and have it return a small clean data frame with several interesting statistics.
+
+```{r}
+# set.seed(17); # Set seed for reproducibility
+MM1 = function (
+  N = 1e4,      # number of jobs to simulate;
+  lambda = 0.5, # arrival rate
+  mu = 1 # service rate
+) {
+  Arrival = cumsum(rexp(n=N, rate = lambda)); # Arrival times
+  Service = rexp(N,rate=1/mu); # Service times
+  Remaining = rep(N, x=NA);    # Remaining service times of each job
+  Completion = rep(N, x=NA);   # Completion time of each job
+  
+  t = 0; # simulation time
+  
+  CurrentTask = NA;
+  NextArrival = 1;
+  while (TRUE) {
+    # print(t);
+    # print(Arrival);
+    # print(Service);
+    # print(Remaining);
+    dtA = NA;
+    dtC = NA;
+    if(length(Arrival[Arrival>t])>0) { # if an arrival exists after t
+      dtA = head(Arrival[Arrival>t],n=1)-t ; # time to next arrival
+    }
+    if(!is.na(CurrentTask)) { # if a task is running
+      dtC = Remaining[CurrentTask]; # time to next completion
+    }
+    if(is.na(dtA) & is.na(dtC)) {
+      break;
+    } 
+    
+    dt = min(dtA,dtC,na.rm=T);
+    
+    # update system variables
+    t = t + dt;
+    if((NextArrival <=N) & (Arrival[NextArrival] == t)) {
+      Remaining[NextArrival] = Service[NextArrival];
+      NextArrival = NextArrival + 1;
+    }
+    if(!is.na(CurrentTask)) {
+      Remaining[CurrentTask] = Remaining[CurrentTask] - dt ;
+      if(Remaining[CurrentTask] <= 0) {
+        Completion[CurrentTask] = t;
+        Remaining[CurrentTask] = NA;
+      }
+      CurrentTask = NA;
+    }
+    # FIFO scheduling discipline. Change here to implement other scheduling disciplines
+    WaitingList=(1:NextArrival)[!is.na(Remaining)]; # Optimize this line!
+    if(length(WaitingList)>0) {
+      CurrentTask = head(WaitingList,n=1);
+    }
+  }
+  
+  return(data.frame(lambda = lambda , N=N, R_mean = mean(Completion-Arrival), 
+                    R_sd = sd(Completion-Arrival)))
+}
+  
+# Make a plot of the ResponseTime as a function of lambda.
+MM1(N=100, lambda = 0.1)
+```
+
+# Let's study the behavior of an MM1 Queue
+
+Let's vary the input rate `lambda`:
+```{r}
+df = data.frame()
+for(lambda in seq(from=.1, to=.9, by = .1)) {
+ df = rbind(df, MM1(N=1000, lambda = lambda))
+}
+df
+```
+Now, let's plot the response time as a function of the load
+```{r}
+ggplot(data=df, aes(x = lambda, y = R_mean)) + geom_point() + 
+  geom_errorbar(aes(ymin = R_mean-2*R_sd/sqrt(N), ymax = R_mean+2*R_sd/sqrt(N)),width=.05) +
+  xlim(0,1) + ylim(0,10) + geom_function(fun = function(x) 1/(1-x))+ 
+  theme_bw() # + geom_smooth(se = F)
+```
+
+Note: if the `geom_function` is not available, you may have to plot it manually, e.g., as follows
+```{r}
+df_th = data.frame(lambda = seq(from=.1, to=.9, by = .01))
+df_th$R_mean = 1/(1-df_th$lambda)
+
+ggplot(data=df, aes(x = lambda, y = R_mean)) + geom_point() + 
+  geom_errorbar(aes(ymin = R_mean-2*R_sd/sqrt(N), ymax = R_mean+2*R_sd/sqrt(N)),width=.05) +
+  xlim(0,1) + ylim(0,10) + geom_line(data=df_th) + 
+  theme_bw() # + geom_smooth(se = F)
+```
+
+# TODO for 4th of March
+- Modify the MM1 function to allow the service time to follow a $U(0.5, 1.5)$ distribution or a [Gamma distribution](https://en.wikipedia.org/wiki/Gamma_distribution) with parameters $\alpha =\beta = .2$ (so that the expected duration is 1 but the variance is 5). 
+  - Plot the three behaviors on the same graph with a different color for each graph (Hint: adding the information on the distribution in a column of the dataframe is a good idea...).
+  - Comment the behavior. Is it expected ?
+- Change the FIFO strategy for a SPT strategy (shortest processing time first) assuming the duration is available to the scheduler when a task enters the system. Compare with the previous results.
+
+Note that, as we explained during the lecture:
+1. The estimation of the confidence intervals is incorrect (way over-confident optimistic for large $\lambda$) as the response time of the jobs are not independant from each others. You may want to fix this.
+2. The higher the load ($\lambda$), the larger the variance, hence the harder to obtain a good estimation of the response time. Take this into account to adapt the duration of your simulations.
+
+What I care about is not just *clean code* but also *clear explanations*.
+Indeed, as Harold Abelson wrote in *Structure and Interpretation of Computer Programs*:
+
+> Programs must be written for people to read, and only incidentally for machines to execute.
+
+You will return me both the `Rmd` and the `html` output by sending them both to `arnaud.legrand@imag.fr,jonatha.anselmi@inria.fr,louis-sebastien.rebuffi@inria.fr` before the 4th of March 2022 10PM.
