@@ -17,7 +17,7 @@ charge of practical sessions.
 | 07-11 feb. | [Poisson Process](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
 | 14-18 feb. | [Continuous Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Presentation of DM + Exercises CTMC](#26-02-2022-practical-session-5)
 | 28-04 feb. | [Continuous Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] Aloha (end) / [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263539/Aloha.elements.de.corection.pdf)
-| 07-11 mar. | [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Simulation of the M/M/K/K queue in R](#12-03-2022-practical-session-7)
+| 07-11 mar. | [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Simulation of the M/M/K/K queue in R](practical-session-7)
 | 14-18 mar.| The M/G/1 queue   | [LSR] [TD Page Rank.pdf](https://github.com/jonatha-anselmi/INFO4-EP/files/6263543/TD.Page.Rank.pdf) et [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263545/Elements.de.correction.Page.Rank.pdf)
 | 21-25 mar. | [Jackson Queueing Networks](#25-03-2022-lecture-10)   | [Performance Evaluation and Optimization of a Web Application](#26-03-2022-practical-session-9)
 | 28-01 mar | Pas de cours   | [Quick](#02-04-2022-practical-session-10)
