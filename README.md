@@ -10,26 +10,26 @@ charge of practical sessions.
 
 | Semaine    | Cours (Jeudi, 9h45-11h15)                                                | TD (Vendredi, 11h30-13h00)                                                                |
 |:-----------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
-| 10-14 jan. | [Course content and introduction to queueing theory](#14-01-2021-lecture-1)     |  [Discrete Event Simulation of a G/G/1 queue](#15-01-2021-practical-session-1)
-| 17-21 jan. | [The GI/GI/1 queue](#21-01-2021-lecture-2)   | Pas de TD                                                                         
-| 24-28 jan. | [Little's law and Intro to Discrete Time Markov Chains](#28-01-2021-lecture-3)   | [Exercises on DTMC](#29-01-2021-practical-session-2)
-| 01-04 feb. | [Discrete Time Markov Chains](#04-02-2021-lecture-4)  | [LSR] [Cache](https://github.com/jonatha-anselmi/INFO4-EP/files/6263531/TD7-Memoire-Paginee.pdf) et [Corrigé](https://github.com/jonatha-anselmi/INFO4-EP/files/6263518/Corrige.TD.Pagination.pdf)
-| 07-11 feb. | [Poisson Process](#11-02-2021-lecture-5)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
-| 14-18 feb. | [Continuous Time Markov Chains](#25-02-2021-lecture-6)   | [Presentation of DM + Exercises CTMC](#26-02-2021-practical-session-5)
-| 28-04 feb. | [Continuous Time Markov Chains](#04-03-2021-lecture-7)   | [LSR] Aloha (end) / [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263539/Aloha.elements.de.corection.pdf)
-| 07-11 mar. | [Classic Queues](#11-03-2021-lecture-8)   | [Simulation of the M/M/K/K queue in R](#12-03-2021-practical-session-7)
+| 10-14 jan. | [Course content and introduction to queueing theory](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_01_intro.pdf)     |  [Discrete Event Simulation of a G/G/1 queue](#practical-session-1)
+| 17-21 jan. | [The GI/GI/1 queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)   | Pas de TD                                                                         
+| 24-28 jan. | [Little's law](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf) and  [Discrete Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf) | Exercises on DTMC
+| 01-04 feb. | [Discrete Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf)  | [LSR] [Cache](https://github.com/jonatha-anselmi/INFO4-EP/files/6263531/TD7-Memoire-Paginee.pdf) et [Corrigé](https://github.com/jonatha-anselmi/INFO4-EP/files/6263518/Corrige.TD.Pagination.pdf)
+
+| 07-11 feb. | [Poisson Process](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
+| 14-18 feb. | [Continuous Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Presentation of DM + Exercises CTMC](#26-02-2022-practical-session-5)
+| 28-04 feb. | [Continuous Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] Aloha (end) / [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263539/Aloha.elements.de.corection.pdf)
+| 07-11 mar. | [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Simulation of the M/M/K/K queue in R](#12-03-2022-practical-session-7)
 | 14-18 mar.| The M/G/1 queue   | [LSR] [TD Page Rank.pdf](https://github.com/jonatha-anselmi/INFO4-EP/files/6263543/TD.Page.Rank.pdf) et [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263545/Elements.de.correction.Page.Rank.pdf)
-| 21-25 mar. | [Jackson Queueing Networks](#25-03-2021-lecture-10)   | [Performance Evaluation and Optimization of a Web Application](#26-03-2021-practical-session-9)
-| 28-01 mar | Pas de cours   | [Quick](#02-04-2021-practical-session-10)
+| 21-25 mar. | [Jackson Queueing Networks](#25-03-2022-lecture-10)   | [Performance Evaluation and Optimization of a Web Application](#26-03-2022-practical-session-9)
+| 28-01 mar | Pas de cours   | [Quick](#02-04-2022-practical-session-10)
                                                                                   
 
 
-## [14-01-2021] Lecture 1
-
-Course content, objectives and organization; Queueing problems -- [slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_01_intro.pdf)
+# Supplementary Material
 
 
-##### Install R and Rstudio
+
+## Install R and Rstudio
 If you're running a debian or an ubuntu,
 simply follow the following steps (otherwise, e.g., MacOS X or
 Windows, you may want to have a look at [these
@@ -93,7 +93,7 @@ Rstudio may complain that it requires upgraded versions of knitr,
 rmarkdown and tinytex... :( Just proceed and you'll be ready for the
 practical session.
 
-## [15-01-2021] Practical Session 1
+## Practical Session 1
 
 The objective is to write together a code in R that simulates the dynamics of a G/G/1 queue and then to use this code to estimate performance metrics such as the average time spent in the system by jobs as a function of the input parameters (e.g., job arrival and service rates). <ins>Make sure to have installed R and Rstudio on your machine</ins> (see above).
 
@@ -144,77 +144,26 @@ while(T) {
 Link to [code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd). Plotting the mean response time as a function of `lambda`, what conclusion can you make?
 
 
-## [21-01-2021] Lecture 2
-
-Kendall's notation; GI/GI/1 queue: Lindley's equation and stability; Little's law -- [slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)
-
-### Assignments
-
-- Use the code that simulates a [G/G/1/FIFO queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd) to verify that stability is indeed obtained if and only if the arrival rate is smaller than the service rate.
-- Modify the [G/G/1/FIFO code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd) to implement a G/G/1/LIFO queue (LIFO = Last-In-First-Out). Does the stablity region change?
 
 
-## [28-01-2021] Lecture 3
-
-[Little's law](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf):
-The student knows how to apply Little's law to a queueing system by looking at the workload process and the number of jobs.
-
-[DTMC](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf):
-The student knows how to model simple systems by means of CMTD, construct the underlying a graph and transition probability matrix.
-
-
-## [04-02-2021] Lecture 4
-
-[DTMC](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf)
-The student knows the conditions that guarantee the existence of a stationary distribution and has learnt how to write the global balance equations.
-
-## [11-02-2021] Lecture 5
-
-[Poisson Process](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
-The student knows the basic properties of the Poisson process: definitions and equivalent characterizations, connection with the uniform distribution, thinning, superposition.
-
-## [25-02-2021] Lecture 6
-
-[Continuous Time Markov Chains](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
-The student knows how to model simple systems by means of CTMC, construct the underlying a graph and transition rate matrix, and solve the global balance (or equilibrium) equations under the appropriate hypotheses.
-
-
-## [26-02-2021] Practical Session 5
-
-Presentation of the homework assignments: [all the details](https://rpubs.com/janselmi/LBDM).
-
-## [04-03-2021] Lecture 7
-
-[Continuous Time Markov Chains](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
-The student knows how to model simple queueing systems by means of CTMC: M/M/1, two M/M/1 in parallel, two M/M/1 in series, Engset (or Ehrenfest) model.
-
-## [11-03-2021] Lecture 8
-
-[Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)
-The student knows how to find analytically the stationary distributions associated to classic queueing systems. Specifically, M/M/1, M/M/1/K, M/M/&#8734;
-, M/M/K/K.
-
-## [12-03-2021] Practical Session 7
+## Practical Session 7
 
 The student knows how to simulate classic queueing systems in R.
 
 [Simulation code for the M/M/K/K queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/MMKK.Rmd), and [[link on rpubs](https://rpubs.com/janselmi/MMKK)].
 
 
-## [25-03-2021] Lecture 9
 
-
-## [25-03-2021] Lecture 10
 
 Jackson queueing networks; identification of the underlying continuous time Markov chain; global balance equations; Jackson's theorem and product form; and computation of performance measures of interest such as the overall mean response time
 [[slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)].
 
 
-## [26-03-2021] Practical Session 9
+## [26-03-2022] Practical Session 9
 
 Performance Evaluation and Optimization of a web application; theory and simulation; all the details on [[rpubs](https://rpubs.com/janselmi/webapp)].
 
-## [02-04-2021] Practical Session 10
+## [02-04-2022] Practical Session 10
 
 Correction to [Quick](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/quick_2020_Exam_18.pdf)
 
