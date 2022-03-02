@@ -17,10 +17,10 @@ charge of practical sessions.
 | 07-11 feb. | [Poisson Process](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
 | 14-18 feb. | [Continuous Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Presentation of DM + Exercises CTMC](#26-02-2022-practical-session-5)
 | 28-04 feb. | [Continuous Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] Aloha (end) / [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263539/Aloha.elements.de.corection.pdf)
-| 07-11 mar. | [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Simulation of the M/M/K/K queue in R](practical-session-7)
+| 07-11 mar. | [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Simulation of the M/M/K/K queue in R](https://rpubs.com/janselmi/MMKK)
 | 14-18 mar.| The M/G/1 queue   | [LSR] [TD Page Rank.pdf](https://github.com/jonatha-anselmi/INFO4-EP/files/6263543/TD.Page.Rank.pdf) et [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263545/Elements.de.correction.Page.Rank.pdf)
-| 21-25 mar. | [Jackson Queueing Networks](#25-03-2022-lecture-10)   | [Performance Evaluation and Optimization of a Web Application](#26-03-2022-practical-session-9)
-| 28-01 mar | Pas de cours   | [Quick](#02-04-2022-practical-session-10)
+| 21-25 mar. | [Jackson Queueing Networks](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)   | TBA
+| 28-01 mar | Pas de cours   | Correction to [Quick](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/quick_exos.pdf)
                                                                                   
 
 
@@ -142,27 +142,4 @@ while(T) {
 
 Link to [code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd). Plotting the mean response time as a function of `lambda`, what conclusion can you make?
 
-
-
-
-## Practical Session 7
-
-The student knows how to simulate classic queueing systems in R.
-
-[Simulation code for the M/M/K/K queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/MMKK.Rmd), and [[link on rpubs](https://rpubs.com/janselmi/MMKK)].
-
-
-
-
-Jackson queueing networks; identification of the underlying continuous time Markov chain; global balance equations; Jackson's theorem and product form; and computation of performance measures of interest such as the overall mean response time
-[[slides](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)].
-
-
-## [26-03-2022] Practical Session 9
-
-Performance Evaluation and Optimization of a web application; theory and simulation; all the details on [[rpubs](https://rpubs.com/janselmi/webapp)].
-
-## [02-04-2022] Practical Session 10
-
-Correction to [Quick](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/quick_2020_Exam_18.pdf)
 
