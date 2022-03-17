@@ -2,7 +2,7 @@
 
 Welcome to the course "Évaluation de Performances" edition 2021/2022!
 
-[Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) (cours) and [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@univ-grenoble-alpes.fr) (TD) are in charge of the lectures.
+[Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) (Cours) and [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@univ-grenoble-alpes.fr) (TD) are in charge of the lectures.
 
 ## Course content and planning
 
