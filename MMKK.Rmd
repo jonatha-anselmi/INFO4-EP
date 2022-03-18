@@ -1,16 +1,10 @@
 ---
-title: "EP2021-TD-MMKK"
+title: "INFO4-EP TD-MMKK"
 author: "Jonatha Anselmi"
-date: "March 12, 2021"
+date: "March 18, 2022"
 output: html_document
 ---
 
----
-title: "Simulation of a M/M/K/K queue"
-author: "Jonatha Anselmi"
-date: "January 15, 2021"
-output: html_document
----
 
 This code simulates the continuous time Markov chain associated to a M/M/K/K queue and prints the proportion of time where all servers are occupied (the blocking probability). This is compared with the one obtained by the Erlang B formula.
 
