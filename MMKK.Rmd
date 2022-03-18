@@ -73,3 +73,65 @@ print(p_blocking_theory)
 
 ```
 
+
+This code simulates again the continuous time Markov chain associated to a M/M/K/K queue as above but in aslightl different (equivalent) manner -- code written in class on March 18, 2022.
+
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+set.seed(17); # Set seed for reproducibility
+N=1e5; # number of events to simulate;
+K=10;         # number of servers
+lambda=0.6*K; # arrival rate
+mu=1;         # service rate
+
+p_blocking=0; # blocking probability with T
+p_blocking_transient=rep(N, 0); # transient blocking probability
+p_blocking_theory=0;
+T=0; # simulation time
+state=0;
+for (i in 1:N) {
+
+  A=rexp(1,lambda); # Time to next job arrival
+  D=A+1;
+  if (state>0){
+      D=rexp(1,mu*state);  # Time to next service completion
+  }
+  
+  T=T+min(A,D); # time after i events
+
+  # state is updated here
+  if (state==K){
+    p_blocking=p_blocking+min(A,D);
+  }
+    p_blocking_transient[i]=p_blocking/T;
+
+  if(A>D){
+    if (state>0){
+      state=state-1;
+    }
+  } else {
+    if (state<K){
+      state=state+1;
+    }
+  }
+
+}
+p_blocking=p_blocking/T;
+
+rho=lambda/mu; normalizing_costant=0;
+for (i in 0:K){
+  normalizing_costant = normalizing_costant + rho**i/factorial(i);
+}
+p_blocking_theory=rho**K/factorial(K);
+p_blocking_theory=p_blocking_theory/normalizing_costant;
+
+print(p_blocking)
+print(p_blocking_theory)
+
+events=1:N;
+plot(events, p_blocking_transient, type = "l", lty = 1)
+abline(h = p_blocking_theory, col="red")
+
+```
