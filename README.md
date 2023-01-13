@@ -1,6 +1,6 @@
 # INFO4-EP: Évaluation de Performances
 
-Welcome to the course "Évaluation de Performances" edition 2021/2022!
+Welcome to the course "Évaluation de Performances" edition 2022/2023.
 
 [Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) (Cours) and [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@univ-grenoble-alpes.fr) (TD) are in charge of the lectures.
 
