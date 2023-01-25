@@ -7,18 +7,18 @@ Welcome to the course "Évaluation de Performances" edition 2022/2023.
 ## Course content and planning
 
 | Semaine    | Cours (Jeudi, 9h45-11h15)                                                | TD (Vendredi, 11h30-13h00)                                                                |
-|:-----------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
+|:-------------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
 | Week #1 | [Course content and introduction to queueing theory](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_01_intro.pdf)     |  [Discrete Event Simulation of a G/G/1 queue](#practical-session-1)
-| 17-21 jan. | [The GI/GI/1 queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)   | Pas de TD                                                                         
-| Week #2 | [Little's law](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf) and  [Discrete Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf) | Exercises on DTMC
-| Week #3 | [Discrete Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf)  | [LSR] [Cache](https://github.com/jonatha-anselmi/INFO4-EP/files/6263531/TD7-Memoire-Paginee.pdf) et [Corrigé](https://github.com/jonatha-anselmi/INFO4-EP/files/6263518/Corrige.TD.Pagination.pdf)
-| Week #4 | [Poisson Process](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
-| Week #5 | [Continuous Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | Presentation of DM ([Rmd](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/INFO4.Rmd) and [HTML](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/INFO4.html)) + Exercises on CTMCs
-| Week #6 | [Continuous Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] Aloha (end) / [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263539/Aloha.elements.de.corection.pdf)
-| Week #7 | [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Page Rank](https://github.com/jonatha-anselmi/INFO4-EP/files/6263543/TD.Page.Rank.pdf) et [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263545/Elements.de.correction.Page.Rank.pdf)
-| Week #8| [Classic Queues (continued)](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Simulation of the M/M/K/K queue in R](https://rpubs.com/janselmi/MMKK)
-| Week #9 | [Jackson Queueing Networks (JQNs)](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)   | [LSR] [JQN example and simulation](https://rpubs.com/janselmi/webapp)
-| Week #10 | Pas de cours   | Correction to [Quick](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/quick_exos.pdf)
+| Week #2 | [The GI/GI/1 queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)   | [Discrete Event Simulation of a G/G/1 queue](#practical-session-1)                                                                        
+| Week #3 | [Little's law](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf) and  [Discrete Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf) | Exercises on DTMC
+| Week #4 | [Discrete Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf)  | [LSR] [Cache](https://github.com/jonatha-anselmi/INFO4-EP/files/6263531/TD7-Memoire-Paginee.pdf) et [Corrigé](https://github.com/jonatha-anselmi/INFO4-EP/files/6263518/Corrige.TD.Pagination.pdf)
+| Week #5 | [Poisson Process](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
+| Week #6 | [Continuous Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | Presentation of DM ([Rmd](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/INFO4.Rmd) and [HTML](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/INFO4.html)) + Exercises on CTMCs
+| Week #7 | [Continuous Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] Aloha (end) / [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263539/Aloha.elements.de.corection.pdf)
+| Week #8 | [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Page Rank](https://github.com/jonatha-anselmi/INFO4-EP/files/6263543/TD.Page.Rank.pdf) et [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263545/Elements.de.correction.Page.Rank.pdf)
+| Week #9| [Classic Queues (continued)](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Simulation of the M/M/K/K queue in R](https://rpubs.com/janselmi/MMKK)
+| Week #10 | [Jackson Queueing Networks (JQNs)](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)   | [LSR] [JQN example and simulation](https://rpubs.com/janselmi/webapp)
+| Week #11 | Pas de cours   | Correction to [Quick](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/quick_exos.pdf)
                                                                                   
 
 
