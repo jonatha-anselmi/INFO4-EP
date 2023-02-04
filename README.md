@@ -10,7 +10,7 @@ Welcome to the course "Évaluation de Performances" edition 2022/2023.
 |:-------------|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------|
 | Week #1 | [Course content and introduction to queueing theory](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_01_intro.pdf)     |  [Discrete Event Simulation of a G/G/1 queue](#practical-session-1)
 | Week #2 | [The GI/GI/1 queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)   | [Discrete Event Simulation of a G/G/1 queue](#practical-session-1)                                                                        
-| Week #3 | [Little's law](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf) and  [Discrete Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf) | [Load Balancing in R](https://rpubs.com/janselmi/LB)
+| Week #3 | [Little's law](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf) and  [Discrete Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf) | [Load Balancing in R](https://rpubs.com/janselmi/LB) [Rmd file](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/LoadBalancing.Rmd)
 | Week #4 | [Discrete Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf)  | Presentation of DM + Exercises on DTMC 
 | Week #5 | [Poisson Process](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Cache](https://github.com/jonatha-anselmi/INFO4-EP/files/6263531/TD7-Memoire-Paginee.pdf) et [Corrigé](https://github.com/jonatha-anselmi/INFO4-EP/files/6263518/Corrige.TD.Pagination.pdf)
 | Week #6 | [Continuous Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
@@ -140,4 +140,4 @@ while(T) {
 
 ### Code
 
-Link to [code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd). Plotting the mean response time as a function of `lambda`, what conclusion can you make?
+[Link to code](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/GG1.Rmd).
