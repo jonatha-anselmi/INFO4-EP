@@ -1,0 +1,228 @@
+---
+title: "Job dispatching among parallel servers - INFO4-EP - TD Feb 3, 2023"
+author: "Jonatha Anselmi"
+output: html_document 
+date: "2023-02-03"
+---
+
+## Problem Statement
+
+We consider a system composed of $K$ servers working in parallel, each with its own queue. In the following, "queues" and "servers" are synonyms. Queues have an infinite buffer and operate under the First-In First-Out (FIFO) scheduling discipline.
+Server $k$ operates with speed $\mu_k$.
+Jobs join the network via an exogenous process with rate $\lambda$ and are dispatched to queue $k$ according to some dispatching algorithm; see below. 
+After processing, jobs leave the system and never return.
+
+Job sizes are independent and classified as either <i>long</i>, i.e., of size $x_M$, or <i>short</i>, i.e., of size $x_m$, with $0< x_m < x_M <\infty$.
+Let $X$ denote the random variable of the job sizes.
+We also assume that job sizes have a ``heavy-tailed'' distribution in the sense that
+
+$$
+\mathbb{P}(\mbox{"long job"}) =\mathbb{P}(X=x_M)=\alpha\, x_M^{-\beta},\quad \alpha>0, \, 0\le \beta\le 1
+$$
+
+with $x_M$ "large". Here, the tail of $X$ decays polynomially and we will be particularly interested in the case where $\beta\le1$ as this implies high variance when $x_M$ grows; say $x_m=1$ and $x_M=10^4$.
+
+
+
+We are interested in evaluating the performance induced by the following dispatching algorithms:
+
+<ul  class="org-ul">
+<li><b>Random (RND)</b>: Upon arrival, each job is dispatched to queue $i$ with probability $1/K$ independently of all else.  </li>
+<li><b>Round-Robin (RR)</b>: Upon arrival, the $n$-th job is sent to queue $1+(n\bmod K)$.  </li>
+<li><b>Least Loaded (LL-$d$)</b>: Upon arrival, each job is dispatched to the queue with the shortest workload among $d$ selected uniformly at random. </li>
+<li> <b>Size Interval Task Allocation (SITA-$c$)</b>: Upon arrival, a short resp. job is sent uniformly at random among servers $\{1,\ldots,c\}$ resp. $\{c+1,\ldots,K\}$, for some $c$.</li>
+</ul>
+
+The performance metric of interest is the <i>waiting time</i>, i.e., the average time that jobs spend waiting before receiving service.
+
+The objective is to understand which one works better and, if possible, to extract some quantitative insight.
+Towards this purpose, we rely on simulation and initially assume that servers operate with speed one, i.e., $\mu_k=1$.
+
+
+## Implementation in R
+
+We write a code to simulate the waiting times induced by the job dispatching schemes above. We rely on Lindley's recursion.
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+LB_random <- function(N,K,mu,InterArrival,JobSize) {      
+
+  WaitingTime=rep(0,K);
+  WaitingTimeCum=rep(0,K);
+  
+  for (n in 1:N) #for each job
+  {
+    # Dispatching decision of RANDOM
+    U = sample(x=1:K,1); 
+    for (k in 1:K) #for each server
+    {
+      # Update the waiting time of server k (Lindley's recursion)
+      WaitingTime[k] = max(WaitingTime[k] - InterArrival[n], 0);
+
+      if(U==k)
+      {
+        WaitingTimeCum[k] = WaitingTimeCum[k]+WaitingTime[k];
+        WaitingTime[k]    = WaitingTime[k]+JobSize[n]/mu[k];
+      }
+    }
+  }
+
+ return(sum(WaitingTimeCum)/N);
+}
+
+LB_RR <- function(N,K,mu,InterArrival,JobSize) {      
+
+  WaitingTime=rep(0,K);
+  WaitingTimeCum=rep(0,K);
+
+  for (n in 1:N) #for each job
+  {
+    # Dispatching decision of Round Robin
+    U = n%%K; 
+    for (k in 1:K) #for each server
+    {
+      # Update the waiting time of server k (Lindley's recursion)
+      WaitingTime[k] = max(WaitingTime[k] - InterArrival[n], 0);
+      if(U+1==k)
+      {
+        WaitingTimeCum[k] = WaitingTimeCum[k]+WaitingTime[k];
+        WaitingTime[k]    = WaitingTime[k]+JobSize[n]/mu[k];
+      }
+    }
+  }
+
+ return(sum(WaitingTimeCum)/N);
+}
+
+LB_LLd <- function(N,K,mu,InterArrival,JobSize,d) {      
+
+  WaitingTime=rep(0,K);
+  WaitingTimeCum=rep(0,K);
+
+  for (n in 1:N) #for each job
+  {
+    for (k in 1:K) #for each server
+    {
+      # Update the waiting time of server k (Lindley's recursion)
+      WaitingTime[k] = max(WaitingTime[k] - InterArrival[n], 0);
+    }
+    
+    # Dispatching decision of Least Loaded - d
+    s=sample(x=1:K, d, replace = F);
+    k_win=s[which.min(WaitingTime[s])];
+
+    # Update the waiting time of server k (Lindley's recursion)
+    WaitingTimeCum[k_win] = WaitingTimeCum[k_win]+WaitingTime[k_win];
+    WaitingTime[k_win]    = WaitingTime[k_win]+JobSize[n]/mu[k_win];
+
+  }
+
+ return(sum(WaitingTimeCum)/N);
+}
+
+LB_SITAc <- function(N,K,mu,InterArrival,JobSize,c,xm) {      
+
+  WaitingTime=rep(0,K);
+  WaitingTimeCum=rep(0,K);
+  
+  for (n in 1:N) #for each job
+  {
+    for (k in 1:K) #for each server
+    {
+      # Update the waiting time of server k (Lindley's recursion)
+      WaitingTime[k] = max(WaitingTime[k] - InterArrival[n], 0);
+    }
+    
+    # Dispatching decision of SITA-c
+    k_win=sample(x=(c+1):K);
+    if(JobSize[n]<=3*xm/2)
+    {
+      # job n is short
+      k_win=sample(x=1:c);
+    }
+
+    # Update the waiting time of server k (Lindley's recursion)
+    WaitingTimeCum[k_win] = WaitingTimeCum[k_win]+WaitingTime[k_win];
+    WaitingTime[k_win]    = WaitingTime[k_win]+JobSize[n]/mu[k_win];
+
+  }
+
+ return(sum(WaitingTimeCum)/N)
+
+}
+
+################################################################################
+N=2e6; # number of jobs to simulate
+K=50;  # number of servers
+mu = sample(x=1:1, K, replace = TRUE); # service rates
+
+beta=0.8;
+xM=1e4;
+xm=1;
+JobSize=sample(c(xm,xM),N,replace=T,prob=c(1-1/xM^beta,1/xM^beta)); # Job sizes
+# for (n in 1:N)
+# {
+#   if (JobSize[n]<=3*xm/2)
+#   {
+#     JobSize[n]=runif(1,xm/2,3*xm/2);
+#   }  else {
+#     JobSize[n]=runif(1,xM/2,3*xM/2);
+#   }
+# }
+
+EX=xm*(1-1/xM^beta) + xM^(1-beta); # Expected value of job sizes
+
+B=10;
+W_RANDOM=rep(0,B-1);
+W_RR=rep(0,B-1);
+W_LLd=rep(0,B-1);
+
+for (rho in (0.5:(B-0.5))/B) 
+{
+  # For stability
+  lambda=K * rho/EX; #"overall arrival rate"<"overall service rate"=(mu[1]+...+ mu[K])/EX
+  InterArrival = rexp(n=N, rate = lambda);    # Inter-arrival times
+
+  W_RANDOM[rho*B]=LB_random(N,K,mu,InterArrival,JobSize);
+  W_RR[rho*B]=LB_RR(N,K,mu,InterArrival,JobSize);
+  W_LLd[rho*B]=LB_LLd(N,K,mu,InterArrival,JobSize,2);
+  
+  print(paste("Waiting Times with rho =",format(round(rho, 2), nsmall = 2),"and K =",K))
+  
+  print(paste("Random: ", W_RANDOM[rho*B]))
+  print(paste("RR: ", W_RR[rho*B]))
+  print(paste("LL-d: ", W_LLd[rho*B]))
+
+  #c=floor(K/2); # making sure that c is an integer
+  #print(paste("SITA-c: ", LB_SITAc(N,K,mu,InterArrival,JobSize,c,xm)))
+
+  cat("\n")
+}
+
+xdata=(1:(B-1))/B;
+
+plot(xdata, W_RANDOM, xlim=c(0,1), ylim = c(0, max(W_RANDOM)*1.1), type="o",
+     col="blue", pch="o", lty=1, ylab="",xlab="rho",
+     main=paste("Average Waiting Times - K=",K))
+points(xdata, W_RR, col="red", pch="*")
+lines(xdata, W_RR, col="red",lty=2)
+points(xdata, W_LLd, col="dark red", pch="*")
+lines(xdata, W_LLd, col="dark red",lty=2)
+legend("topleft",legend=c("RANDOM","RR","LL2"), col=c("blue","red","black"),
+                                   pch=c("o","*","+"),lty=c(1,2,3), ncol=1)
+
+```
+
+<br>
+Therefore, LL-2 provides a much better performance than RR and RANDOM, which provide more or less the same performance.
+
+
+## Homework
+
+- How the above plots change if job sizes follow an exponential distribution with rate one?
+
+- Assume $K=100$ and compare the average waiting time of RR-2 with the one of SITA-$c$ where $c=\lfloor c^* \rfloor$ with $c^*$ given by $\frac{x_m}{c^*}=\frac{x_M}{K-c^*}$. What is the interpretation of $c^*$?
+
+
+<br><br><br>
