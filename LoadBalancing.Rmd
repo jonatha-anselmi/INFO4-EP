@@ -1,5 +1,5 @@
 ---
-title: "Job dispatching among parallel servers - INFO4-EP - TD Feb 3, 2023"
+title:  Job dispatching among parallel servers <small>  <br> TD Évaluation de Performances, INFO4 Polytech Grenoble</small>
 author: "Jonatha Anselmi"
 output: html_document 
 date: "2023-02-03"
@@ -14,10 +14,10 @@ After processing, jobs leave the system and never return.
 
 Job sizes are independent and classified as either <i>long</i>, i.e., of size $x_M$, or <i>short</i>, i.e., of size $x_m$, with $0< x_m < x_M <\infty$.
 Let $X$ denote the random variable of the job sizes.
-We also assume that job sizes have a ``heavy-tailed'' distribution in the sense that
+We also assume that job sizes have a "heavy-tailed" distribution in the sense that
 
 $$
-\mathbb{P}(\mbox{"long job"}) =\mathbb{P}(X=x_M)=\alpha\, x_M^{-\beta},\quad \alpha>0, \, 0\le \beta\le 1
+\mathbb{P}(\mbox{Long job}) =\mathbb{P}(X=x_M)=\alpha\, x_M^{-\beta},\quad \alpha>0, \, 0\le \beta\le 1
 $$
 
 with $x_M$ "large". Here, the tail of $X$ decays polynomially and we will be particularly interested in the case where $\beta\le1$ as this implies high variance when $x_M$ grows; say $x_m=1$ and $x_M=10^4$.
@@ -156,6 +156,8 @@ LB_SITAc <- function(N,K,mu,InterArrival,JobSize,c,xm) {
 N=2e6; # number of jobs to simulate
 K=50;  # number of servers
 mu = sample(x=1:1, K, replace = TRUE); # service rates
+
+set.seed(17); # Set seed for reproducibility
 
 beta=0.8;
 xM=1e4;
