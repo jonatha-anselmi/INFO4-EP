@@ -4,6 +4,12 @@ Welcome to the course "Évaluation de Performances" edition 2022/2023.
 
 [Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) (Cours) and [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@univ-grenoble-alpes.fr) (TD) are in charge of the lectures.
 
+Support files are linked below. In several TD sessions, we will implement/simulate dynamics of queueing systems in R; the
+[code will be available here](https://rpubs.com/janselmi/LB).
+
+
+
+
 ## Course content and planning
 
 | Semaine    | Cours (Jeudi, 9h45-11h15)                                                | TD (Vendredi, 11h30-13h00)                                                                |
