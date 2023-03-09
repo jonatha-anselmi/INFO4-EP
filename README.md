@@ -16,9 +16,9 @@ Welcome to the course "Évaluation de Performances" edition 2022/2023.
 | Week #6 | [Continuous Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
 | Week #7 | [Continuous Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | Exercises on CTMCs - Aloha / [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263539/Aloha.elements.de.corection.pdf)
 | Week #8 | [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Page Rank](https://github.com/jonatha-anselmi/INFO4-EP/files/6263543/TD.Page.Rank.pdf) et [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263545/Elements.de.correction.Page.Rank.pdf)
-| Week #9| [Classic Queues (continued)](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [Simulation of the M/M/K/K queue in R](https://rpubs.com/janselmi/MMKK)
-| Week #10 | [Jackson Queueing Networks (JQNs)](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)   | [LSR] [JQN example and simulation](https://rpubs.com/janselmi/webapp)
-| Week #11 | Pas de cours   | Correction to [Quick](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/quick_exos.pdf)
+| Week #9| [Jackson Queueing Networks](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)   | [Simulation of the M/M/K/K queue in R](https://rpubs.com/janselmi/MMKK)
+| Week #10 | [Closed Queueing Networks](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)   | [LSR] [JQN example and simulation](https://rpubs.com/janselmi/webapp)
+| Week #11 | [The M/G/1 Queue](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/MG1-PolyTech-INFO4-EP.pdf)   | Correction to [Quick](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/quick_exos.pdf)
                                                                                   
 
 
