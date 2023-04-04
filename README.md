@@ -4,8 +4,8 @@ Welcome to the course "Évaluation de Performances" edition 2022/2023.
 
 [Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) (Cours) and [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@univ-grenoble-alpes.fr) (TD) are in charge of the lectures.
 
-Support files are linked below. In several TD sessions, we will implement/simulate dynamics of queueing systems in R; the
-[code will be available here](https://rpubs.com/janselmi/LB).
+Support files are linked below. In TD sessions, we will implement/simulate dynamics of queueing systems in R; 
+[code will be available on rpubs](https://rpubs.com/janselmi).
 
 
 
@@ -17,7 +17,7 @@ Support files are linked below. In several TD sessions, we will implement/simula
 | Week #1 | [Course content and introduction to queueing theory](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_01_intro.pdf)     |  [Discrete Event Simulation of a G/G/1 queue](#practical-session-1)
 | Week #2 | [The GI/GI/1 queue (Lindley equation and Stability)](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf)   | [Discrete Event Simulation of a G/G/1 queue](#practical-session-1)                                                                        
 | Week #3 | [Little's law](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/EP-Chap2-Bases.pdf) and  [Discrete Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf) | [Load Balancing in R](https://rpubs.com/janselmi/LB) [(Rmd file)](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/LoadBalancing.Rmd)
-| Week #4 | [Discrete Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf)  | Presentation of DM + Exercises on DTMC 
+| Week #4 | [Discrete Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTD.pdf)  | [Presentation of DM](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/INFO4-EP-DM-2023.Rmd) + Exercises on DTMC 
 | Week #5 | [Poisson Process](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Cache](https://github.com/jonatha-anselmi/INFO4-EP/files/6263531/TD7-Memoire-Paginee.pdf) et [Corrigé](https://github.com/jonatha-anselmi/INFO4-EP/files/6263518/Corrige.TD.Pagination.pdf)
 | Week #6 | [Continuous Time Markov Chains I](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | [LSR] [Aloha](https://github.com/jonatha-anselmi/INFO4-EP/files/6263537/TD8-Aloha.pdf)
 | Week #7 | [Continuous Time Markov Chains II](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   | Exercises on CTMCs - Aloha / [Correction](https://github.com/jonatha-anselmi/INFO4-EP/files/6263539/Aloha.elements.de.corection.pdf)
