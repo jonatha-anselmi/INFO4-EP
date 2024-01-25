@@ -1,0 +1,133 @@
+---
+title: "Scheduling Disciplines in the G/G/1 queue"
+author: "Jonatha Anselmi"
+date: "2024-01-19"
+output: html_document
+---
+
+This code simulates the behavior of a G/G/1 queue with a number of scheduling disciplines.
+Then, their response time is printed.
+
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+set.seed(11); # Set seed for reproducibility
+N = 1e5; # number of jobs to simulate;
+N=5;
+
+lambda = 10;  # arrival rate
+mu = 1;       # service rate
+
+scheduling_discipline=1; # 0 = FCFS, 1=LCFS
+for (scheduling_discipline in 1:1)
+{
+  Arrival = cumsum(rexp(n=N, rate = lambda)); # Arrival times
+  Service = rexp(N,rate=mu); # Service times
+  Remaining = rep(N, x=NA);    # Remaining service times of each job
+  Completion = rep(N, x=NA);   # Completion time of each job
+
+  Arrival = c(1,2,3,4,5);
+  Service = c(6,1,1,1,1);
+  
+  t = 0; # simulation time
+  
+  AvgJobs=0;
+  CurrentTask = NA;
+  NextArrival = 1;
+
+  while (TRUE) {
+      print("*********************");
+      print(Arrival);
+      print(Service);
+      print(Remaining);
+    
+      dtA = NA;
+      dtC = NA;
+      if(length(Arrival[Arrival>t])>0) { # if an arrival exists after t
+          dtA = head(Arrival[Arrival>t],n=1)-t ; # time to next arrival
+      }
+      if(!is.na(CurrentTask)) { # if a task is running
+          dtC = Remaining[CurrentTask]; # time to next completion
+      }
+      if(is.na(dtA) & is.na(dtC)) {
+          break;
+      } 
+  
+      dt = min(dtA,dtC,na.rm=T);
+  
+      # update system variables
+      t = t + dt;
+
+      print(paste("Sim. time:", t));
+      print(paste("# of jobs arrived: ", NextArrival));
+
+      # Job arrival
+      
+      if((NextArrival <=N) & (Arrival[NextArrival] == t)) {
+          Remaining[NextArrival] = Service[NextArrival];
+          NextArrival = NextArrival + 1;
+      }
+
+      # Job departure
+      
+      if(!is.na(CurrentTask)) {
+          Remaining[CurrentTask] = Remaining[CurrentTask] - dt ;
+          if(Remaining[CurrentTask] <= 0) {
+              # CurrentTask completed
+              Completion[CurrentTask] = t;
+              Remaining[CurrentTask] = NA;
+              CurrentTask = NA;
+          }
+      }
+      
+      # Scheduling discipline
+      
+      WaitingList=(1:NextArrival)[!is.na(Remaining)];
+     
+      if(length(WaitingList)>0) {
+        
+        print(WaitingList);
+
+        # FCFS
+        if (scheduling_discipline==0){
+          CurrentTask = head(WaitingList,n=1);
+        }
+        
+        # LCFS
+        if (scheduling_discipline==1){
+          # We implement the non-preemptive version of LCFS: jobs are never killed/resumed
+          if(is.na(CurrentTask)) {
+          # here, a task is not running, so we find a new job to serve
+            CurrentTask = tail(WaitingList,n=1);
+          }
+        }
+        
+        # Random Order of Service
+        if (scheduling_discipline==2){
+          if(is.na(CurrentTask)) {
+            # here, a service completion occurred, so we find a new job to serve
+            CurrentTask = sample(WaitingList,n=1);
+          }
+        }
+        
+        # SRPT: Shortest Remaining Processing Time
+
+      }
+
+      print(paste("Current Task = ", CurrentTask))
+
+      #    readline(prompt="Press [enter] to proceed")
+  
+      AvgJobs=AvgJobs+dt*length(WaitingList);
+      
+  }
+  
+  ResponseTime = mean(Completion-Arrival); #average response time
+  AvgJobs=AvgJobs/(tail(Completion,n=1)-Arrival[1]);
+  
+  print(paste("Response Time (", scheduling_discipline, ") = ", ResponseTime))
+}
+
+
+```
