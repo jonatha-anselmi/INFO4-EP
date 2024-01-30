@@ -1,11 +1,13 @@
 # INFO4-EP: Évaluation de Performances
 
-Welcome to the course "Évaluation de Performances" edition 2022/2023.
+This is the website for the "Évaluation de Performances" course held at PolyTech INFO4, 2023-2024.
 
 [Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) (Cours) and [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@univ-grenoble-alpes.fr) (TD) are in charge of the lectures.
 
-Support files are linked below. In TD sessions, we will implement/simulate dynamics of queueing systems in R; 
+Support files are linked below. In TD sessions, we will write code to simulate the dynamics of queueing systems in R; 
 [code will be available on rpubs](https://rpubs.com/janselmi).
+
+See the [official schedule](https://ade-uga-ro-vs.grenet.fr/direct/index.jsp) with room information.
 
 
 
