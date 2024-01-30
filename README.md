@@ -4,12 +4,9 @@ This is the website for the "Évaluation de Performances" course held at PolyTec
 
 [Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) (Cours) and [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@univ-grenoble-alpes.fr) (TD) are in charge of the lectures.
 
-Support files are linked below. In TD sessions, we will write code to simulate the dynamics of queueing systems in R; 
-[code will be available on rpubs](https://rpubs.com/janselmi).
+Snippets of code written in class are published at this rpubs link: [https://rpubs.com/janselmi](https://rpubs.com/janselmi)
 
 See the [official schedule](https://ade-uga-ro-vs.grenet.fr/direct/index.jsp) with room information.
-
-
 
 
 ## Course content and planning
