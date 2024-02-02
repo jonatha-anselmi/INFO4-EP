@@ -5,10 +5,10 @@ date: "2024-01-19"
 output: html_document
 ---
 
-## A general code
+### A general code
 
 The aim of this session is to be able to simulate and compare the dynamics of a G/G/1 queue adopting a number of scheduling disciplines.
-The following code provides as a basis for implementing and testing other scheduling policies.
+The following code provides a basis for implementing and testing other scheduling disciplines.
 
 
 ```{r eval=TRUE, include=TRUE}
@@ -31,132 +31,133 @@ plot_response_times <- function(Service, ES){
     cnt=0;
     for (lambda in lambdas)
     {
-    cnt=cnt+1;
-    Arrival= cumsum(rexp(n=N, rate = lambda)); # Arrival times
-    for (scheduling_discipline in scheduling_disciplines)
-    {
-      t = 0; # simulation time
-      Remaining = rep(N, x=NA);    # Remaining service times of each job
-      Completion = rep(N, x=NA);   # Completion time of each job
+      cnt=cnt+1;
+      # Let's assume a Poisson process coming in, otherwise change the next line
+      Arrival= cumsum(rexp(n=N, rate = lambda)); # Arrival times
+  
+      for (scheduling_discipline in scheduling_disciplines)
+      {
+        t = 0; # simulation time
+        Remaining = rep(N, x=NA);    # Remaining service times of each job
+        Completion = rep(N, x=NA);   # Completion time of each job
+        
+        AvgJobs = 0;
+        CurrentTask = NA;
+        NextArrival = 1;
+        while (TRUE) {
+        
+        if (debug==1){
+            print("*********************");
+            print(Arrival);
+            print(Service);
+            print(Remaining);
+        }
       
-      AvgJobs = 0;
-      CurrentTask = NA;
-      NextArrival = 1;
-      while (TRUE) {
+            dtA = NA;
+            dtC = NA;
+            if(length(Arrival[Arrival>t])>0) { # if an arrival exists after t
+                dtA = head(Arrival[Arrival>t],n=1)-t ; # time to next arrival
+            }
+            if(!is.na(CurrentTask)) { # if a task is running
+                dtC = Remaining[CurrentTask]; # time to next completion
+            }
+            if(is.na(dtA) & is.na(dtC)) {
+                break;
+            } 
+        
+            dt = min(dtA,dtC,na.rm=T);
+        
+            # update system variables
+            t = t + dt;
+            AvgJobs=AvgJobs+dt*sum(!is.na(Remaining));
       
-      if (debug==1){
-          print("*********************");
-          print(Arrival);
-          print(Service);
-          print(Remaining);
-      }
-    
-          dtA = NA;
-          dtC = NA;
-          if(length(Arrival[Arrival>t])>0) { # if an arrival exists after t
-              dtA = head(Arrival[Arrival>t],n=1)-t ; # time to next arrival
-          }
-          if(!is.na(CurrentTask)) { # if a task is running
-              dtC = Remaining[CurrentTask]; # time to next completion
-          }
-          if(is.na(dtA) & is.na(dtC)) {
-              break;
-          } 
+        if (debug==1){
+            print(paste("Sim. time:", t));
+            print(paste("# of jobs arrived: ", NextArrival));
+        }
+            # Job arrival
+            
+            if((NextArrival <=N) & (Arrival[NextArrival] == t)) {
+                Remaining[NextArrival] = Service[NextArrival];
+                NextArrival = NextArrival + 1;
+            }
       
-          dt = min(dtA,dtC,na.rm=T);
-      
-          # update system variables
-          t = t + dt;
-    
-      if (debug==1){
-          print(paste("Sim. time:", t));
-          print(paste("# of jobs arrived: ", NextArrival));
-      }
-          # Job arrival
-          
-          if((NextArrival <=N) & (Arrival[NextArrival] == t)) {
-              Remaining[NextArrival] = Service[NextArrival];
-              NextArrival = NextArrival + 1;
-          }
-    
-          # Job departure
-          
-          if(!is.na(CurrentTask)) {
-              Remaining[CurrentTask] = Remaining[CurrentTask] - dt ;
-              if(Remaining[CurrentTask] <= 0) {
-                  # CurrentTask completed
-                  Completion[CurrentTask] = t;
-                  Remaining[CurrentTask] = NA;
-                  CurrentTask = NA;
-              }
-          }
-          
-          # Scheduling discipline
-          
-          WaitingList=(1:NextArrival)[!is.na(Remaining)];
-         
-          if(length(WaitingList)>0) {
-    
-            # FCFS
-            if (scheduling_discipline==1){
-              CurrentTask = head(WaitingList,n=1);
+            # Job departure
+            
+            if(!is.na(CurrentTask)) {
+                Remaining[CurrentTask] = Remaining[CurrentTask] - dt ;
+                if(Remaining[CurrentTask] <= 0) {
+                    # CurrentTask completed
+                    Completion[CurrentTask] = t;
+                    Remaining[CurrentTask] = NA;
+                    CurrentTask = NA;
+                }
             }
             
-            # LCFS
-            if (scheduling_discipline==2){
-              # We implement the non-preemptive version of LCFS: jobs are never killed/resumed
-              if(is.na(CurrentTask)) {
-              # here, a task is not running, so we find a new job to serve
-                CurrentTask = tail(WaitingList,n=1);
-              }
-            }
+            # Scheduling discipline
             
-            # ROS: Random Order of Service
-            if (scheduling_discipline==3){
-              if(is.na(CurrentTask)) {
-              # here, a task is not running, so we find a new job to serve
-                if (length(WaitingList)>1) {
-                  CurrentTask = sample(WaitingList,size=1);
-                } else{
-                  CurrentTask = WaitingList;
+            WaitingList=(1:NextArrival)[!is.na(Remaining)];
+           
+            if(length(WaitingList)>0) {
+      
+              # FCFS
+              if (scheduling_discipline==1){
+                CurrentTask = head(WaitingList,n=1);
+              }
+              
+              # LCFS
+              if (scheduling_discipline==2){
+                # We implement the non-preemptive version of LCFS: jobs are never killed/resumed
+                if(is.na(CurrentTask)) {
+                # here, a task is not running, so we find a new job to serve
+                  CurrentTask = tail(WaitingList,n=1);
                 }
               }
+              
+              # ROS: Random Order of Service
+              if (scheduling_discipline==3){
+                if(is.na(CurrentTask)) {
+                # here, a task is not running, so we find a new job to serve
+                  if (length(WaitingList)>1) {
+                    CurrentTask = sample(WaitingList,size=1);
+                  } else{
+                    CurrentTask = WaitingList;
+                  }
+                }
+              }
+              
+              # SRPT: Shortest Remaining Processing Time
+              if (scheduling_discipline==4){
+                  CurrentTask = which.min(Remaining);
+              }
+      
             }
+      
+        if (debug==1){
+            print(paste("Current Task = ", CurrentTask))
+            readline(prompt="Press [enter] to proceed")
+        }
             
-            # SRPT: Shortest Remaining Processing Time
-            if (scheduling_discipline==4){
-                CurrentTask = which.min(Remaining);
-            }
-    
-          }
-    
-      if (debug==1){
-          print(paste("Current Task = ", CurrentTask))
-          readline(prompt="Press [enter] to proceed")
-      }
-          
-          AvgJobs=AvgJobs+dt*length(WaitingList);
-    
-      }
-      
-      ResponseTime = mean(Completion-Arrival); #average response time
-      AvgJobs=AvgJobs/(tail(Completion,n=1)-Arrival[1]);
-
-      # Simulation completed. Let's verify Little law: N=lambda*R
-      r_names=rownames(R_time)
-      cat(paste("Sim. ",r_names[scheduling_discipline],"(rho=",round(lambda*ES,digits = 2),") completed."));
-      cat(paste(" Little law verification: ", round(AvgJobs,digits = 4), "=N=lambda*R=", round(lambda*ResponseTime,digits = 4),"\n"));
-      
-      R_time[scheduling_discipline,cnt]=ResponseTime;
-
-    } # loop scheduling discipline
+        } # while
+        
+        ResponseTime = mean(Completion-Arrival); #average response time
+        AvgJobs=AvgJobs/(tail(Completion,n=1)-Arrival[1]);
+  
+        # Simulation completed. Let's verify Little law: N=lambda*R
+        r_names=rownames(R_time)
+        cat(paste("Sim. ",r_names[scheduling_discipline],"(rho=",round(lambda*ES,digits = 2),") completed."));
+        cat(paste(" Little law verification: ", round(AvgJobs,digits = 4), "=N=lambda*R=", round(lambda*ResponseTime,digits = 4),"\n"));
+        
+        R_time[scheduling_discipline,cnt]=ResponseTime;
+  
+      } # loop scheduling discipline
     
     } # loop lambda
     
     cat("\nResponse time matrix:\n")
     print(R_time)
     
-    matplot(t(R_time), type = "l", xlab="Load (lambda*E[S])", ylab="Avg Response Time", xaxt = "n");
+    matplot(t(R_time), type = "l", xlab="Load (lambda*E[S])", ylab="Avg Response Time", xaxt = "n", lwd = 3);
     legend("topleft", legend = rownames(R_time), col=1:4, pch=1);
     axis(side=1,at=1:ncol(R_time),labels=round(lambdas*ES, digits=3));
 
@@ -165,7 +166,7 @@ plot_response_times <- function(Service, ES){
 
 ```
 
-## Let's compare the various policies
+### Let's compare the various policies
 
 First, let us consider exponentially distributed service times. We obtain:
 
@@ -173,9 +174,9 @@ First, let us consider exponentially distributed service times. We obtain:
 knitr::opts_chunk$set(echo = FALSE)
 
 set.seed(11); # Set seed for reproducibility
-N = 1e5; # number of jobs to simulate;
+N = 1e4; # number of jobs to simulate;
 mu=1;
-Service= rexp(N,rate=mu); # Service times
+Service=rexp(N,rate=mu); # Service times
 plot_response_times(Service, 1/mu);
 
 ```
@@ -185,20 +186,19 @@ Then, let us assume that service times follows a Pareto$(x_m,\alpha)$ distributi
 ```{r eval=TRUE, include=TRUE}
 knitr::opts_chunk$set(echo = FALSE)
 
-xm=1;
-alpha=3;
+xm=1; alpha=3;
 set.seed(11); # Set seed for reproducibility
-N = 1e5; # number of jobs to simulate;
-Service=xm/(runif(N)^(1/alpha));
+N = 1e4; # number of jobs to simulate;
+Service=xm/(runif(N)^(1/alpha)); # This generates Pareto samples
 
 plot_response_times(Service, xm*alpha/(alpha-1));
 
 ```
 
-So, SRPT seems to be the best. This is indeed the case in a broad sense [1].  However, this policy remains a bit ideal because one does not really know how much processing time remains for any given job. To patch this, a possibility would be to consider SREPT, i.e., Shortest Remaining Expected Processing Time, which has an obvious meaning... or is it possible to do better than SRPT?
+From the plots, we see that FCFS, LCFS and ROS provide the same average response time. SRPT seems to be the best, and this is indeed the case in a broad sense [1].  However, SRPT remains a bit ideal because one does not really know how much processing time remains for any given job. To patch this, a possibility would be to consider SERPT, i.e., Shortest Expected Remaining Processing Time, which has an obvious meaning; this policy may make sense in practice because the service time distribution is known, as it can be learned from the data. Or, would it be possible to do even better than SERPT?
 
 
-## References
+### References
 
 [1] Schrage, Linus. "A Proof of the Optimality of the Shortest Remaining Processing Time Discipline." Operations Research, vol. 16, no. 3, 1968, pp. 687–90.
 
