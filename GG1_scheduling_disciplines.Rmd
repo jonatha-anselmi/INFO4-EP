@@ -1,12 +1,14 @@
 ---
-title: "Scheduling Disciplines in the G/G/1 queue"
+title: "Scheduling Disciplines in the G/G/1 queue<br><small>Évaluation de Performances 2024, TD #1, INFO4, Polytech Grenoble</small>"
 author: "Jonatha Anselmi"
 date: "2024-01-19"
 output: html_document
 ---
 
-This code simulates the behavior of a G/G/1 queue with a number of scheduling disciplines.
-Then, their response time is printed.
+## A general code
+
+The aim of this session is to be able to simulate and compare the dynamics of a G/G/1 queue adopting a number of scheduling disciplines.
+The following code provides as a basis for implementing and testing other scheduling policies.
 
 
 ```{r eval=TRUE, include=TRUE}
@@ -16,14 +18,15 @@ knitr::opts_chunk$set(echo = TRUE)
 # As input, it takes the job service times (Service) and their mean value (ES)
 plot_response_times <- function(Service, ES){
 
-debug=0;
-    scheduling_disciplines = c(1:4); # 'FCFS'=1,'LCFS'=2,'ROS'=3,'SRPT'=4
-    num_arrival_rates=9;
-    lambdas = ES * c(1:num_arrival_rates)/(num_arrival_rates+1) ;
+    debug=0;
+    scheduling_disciplines = c(1:4); # 'FCFS'=1,'LCFS'=2,'RO-S'=3,'SRPT'=4
+    num_arrival_rates=5;
+    lambdas = (1/ES) * c(1:num_arrival_rates)/(num_arrival_rates+1) ;
     
     # Matrix of average response times for all disciplines and arrival rates
     R_time <- matrix(0, nrow = length(scheduling_disciplines), ncol = length(lambdas));
-    rownames(R_time) <- c("FCFS","LCFS","ROS","SRPT");
+    rownames(R_time) <- c("FCFS","LCFS","RO-S","SRPT");
+    colnames(R_time) <- paste("rho=", round(lambdas*ES, digits = 3), sep = "");
     
     cnt=0;
     for (lambda in lambdas)
@@ -138,24 +141,31 @@ debug=0;
       
       ResponseTime = mean(Completion-Arrival); #average response time
       AvgJobs=AvgJobs/(tail(Completion,n=1)-Arrival[1]);
-    
-      R_time[scheduling_discipline,cnt]=ResponseTime;
+
+      # Simulation completed. Let's verify Little law: N=lambda*R
+      r_names=rownames(R_time)
+      cat(paste("Sim. ",r_names[scheduling_discipline],"(rho=",round(lambda*ES,digits = 2),") completed."));
+      cat(paste(" Little law verification: ", round(AvgJobs,digits = 4), "=N=lambda*R=", round(lambda*ResponseTime,digits = 4),"\n"));
       
+      R_time[scheduling_discipline,cnt]=ResponseTime;
+
     } # loop scheduling discipline
     
     } # loop lambda
     
+    cat("\nResponse time matrix:\n")
     print(R_time)
     
-    #plot(c(1:length(lambdas)), R_time["FCFS",])
-    matplot(t(R_time), type = "l", xlab="Load (lambda*E[S])", ylab="Avg Response Time");
-    legend("topleft", legend = rownames(R_time), col=1:4, pch=1) # optional legend
-    axis(side=1,at=1:ncol(R_time),labels=lambdas)
+    matplot(t(R_time), type = "l", xlab="Load (lambda*E[S])", ylab="Avg Response Time", xaxt = "n");
+    legend("topleft", legend = rownames(R_time), col=1:4, pch=1);
+    axis(side=1,at=1:ncol(R_time),labels=round(lambdas*ES, digits=3));
+
 
 } # end function
 
 ```
 
+## Let's compare the various policies
 
 First, let us consider exponentially distributed service times. We obtain:
 
@@ -163,7 +173,7 @@ First, let us consider exponentially distributed service times. We obtain:
 knitr::opts_chunk$set(echo = FALSE)
 
 set.seed(11); # Set seed for reproducibility
-N = 1e3; # number of jobs to simulate;
+N = 1e5; # number of jobs to simulate;
 mu=1;
 Service= rexp(N,rate=mu); # Service times
 plot_response_times(Service, 1/mu);
@@ -178,9 +188,19 @@ knitr::opts_chunk$set(echo = FALSE)
 xm=1;
 alpha=3;
 set.seed(11); # Set seed for reproducibility
-N = 1e3; # number of jobs to simulate;
+N = 1e5; # number of jobs to simulate;
 Service=xm/(runif(N)^(1/alpha));
 
 plot_response_times(Service, xm*alpha/(alpha-1));
 
 ```
+
+So, SRPT seems to be the best. This is indeed the case in a broad sense [1].  However, this policy remains a bit ideal because one does not really know how much processing time remains for any given job. To patch this, a possibility would be to consider SREPT, i.e., Shortest Remaining Expected Processing Time, which has an obvious meaning... or is it possible to do better than SRPT?
+
+
+## References
+
+[1] Schrage, Linus. "A Proof of the Optimality of the Shortest Remaining Processing Time Discipline." Operations Research, vol. 16, no. 3, 1968, pp. 687–90.
+
+
+<br><br>
