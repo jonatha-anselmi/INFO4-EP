@@ -11,7 +11,7 @@ output: html_document
 
 Votre devoir sera rédigé en français ou en anglais sous forme d'un document HTML généré à l'aide de R/Markdown et publié sur rpubs en prenant soin de bien laisser le code apparent et de fixer la graine de votre générateur à l'aide de la fonction set.seed au tout début du document afin qu’il soit possible de reproduire vos données avec exactitude.
 
-**Vous enverrez l'url rpubs de votre devoir par mail à jonatha.anselmi AT inria.fr <u>avant le 2023-03-31 à 12h00</u>  en indiquant dans le sujet [INFO4-EP] DM.**
+**Vous enverrez l'url rpubs de votre devoir par mail à jonatha.anselmi AT inria.fr <u>avant le 2024-03-31</u>  en indiquant dans le sujet [INFO4-EP] DM.**
 </p>
 </div>
 
