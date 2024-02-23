@@ -1,0 +1,126 @@
+---
+title: "Basic Auto-scaling<br><small>Évaluation de Performances 2024, TD #2, INFO4, Polytech Grenoble</small>"
+author: "Jonatha Anselmi"
+date: "2024-02-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Auto-scaling
+
+Auto-scaling is a powerful mechanism for the efficient management of serverless, edge and cloud computing systems, both from the perspective of user-perceived performance and overall power consumption. It allows the *net* service capacity to scale up or down in response to the current load and the latter distributes incoming jobs across the set of available servers. 
+
+In auto-scaling systems, Servers can be in three states: warm, cold and initializing. A server is said \emph{warm} if turned on, \emph{cold} if turned off and \emph{initializing}
+if making the transition from cold to warm.
+An initializing server performs basic startup operations such as connecting to database, loading libraries, etc. This is the time to provision a new function instance.
+Only warm servers are allowed to receive jobs.
+A server is also said \emph{idle-on} if warm but not processing any job, and \emph{busy} if warm and processing some job.
+Typically, billing policies charge per number of warm and initializing servers used per time unit.
+
+Our aim is to simulate the dynamics of some basic auto-scaling models.
+
+
+### M/M/K/K queueing model
+
+A first basic model for autoscaling is given by a $M/M/K/K$ queue. Here, the interpretation is that $N$ represents the nominal capacity, i.e., the maximum number of servers that can be up and running. Then, if $n_t$ is the number of jobs in the system at time $t$, then $n_t$ also represents the number of busy servers. Therefore, $K-n_t$ may model the number of cold servers, provided that
+
+  1. a server becomes cold immediately after processing a job (or equivalently, the expiration rate is very high so that it can be ignored).
+  
+  2. servers cannot enter the initialization phase (or equivalently, the initialization rate is very high so that it can be ignored).
+
+The $M/M/K/K$ queue can be described by a continuous-time Markov chain with state space $S=\{0,1,\ldots,N\}$ and transition matrix $Q=(q_{i,j})$ where all the non-zero elements are $q_{i,i+1}=\lambda$ for all $i=0,\ldots,K-1$ and $q_{i,i-1}=i \mu $ for all $i=1,\ldots,K$.
+
+Let us write a code to simulate the M/M/N/N queue.
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+simulate_MMNN <- function(lambda, mu, K){
+  
+  set.seed(17); # Set seed for reproducibility
+  N=1e5; # number of events to simulate;
+
+  p_blocking=0; # blocking probability
+  p_blocking_transient=rep(N, 0); # transient blocking probability
+  T=0; # simulation time
+  
+  state=0;
+  
+  for (i in 1:N) {
+  
+    U=lambda+state*mu;
+    time_in_state=rexp(1,U)
+    T=T+time_in_state;
+  
+    if (state==K) {
+      # For the moment, let us find the overall time spent in state K
+      p_blocking=p_blocking+time_in_state;
+    }
+  
+    p_blocking_transient[i]=p_blocking/T;
+  
+    if (runif(1)<lambda/U){
+        # An arrival occurred
+        if (state<K){
+          # The incoming job has room so it is accepted
+          state=state+1;
+        }
+    } else {
+        # A departure occurred
+        state=state-1;    
+    }
+  }
+  
+  # The blocking probability by simulation
+  p_blocking=p_blocking/T;
+  
+  # The blocking probability by theory (The Erlang B formula)
+  p_blocking_theory=0; 
+  normalizing_constant=0;
+  for (i in 0:K){
+    normalizing_constant = normalizing_constant + (lambda/mu)**i / factorial(i);
+  }
+  
+  p_blocking_theory = (lambda/mu)**K / factorial(K);
+  p_blocking_theory = p_blocking_theory / normalizing_constant;
+  
+  
+  # Print the blocking probabilities (simulation and theory)
+  events=1:N;
+  plot(events, p_blocking_transient, type = "l", lty = 1)
+  abline(h = p_blocking_theory, col="red")
+  print(p_blocking)
+  print(p_blocking_theory)
+}
+```
+
+
+Let's simulate.
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = FALSE)
+
+set.seed(11); # Set seed for reproducibility
+K=10;         # number of servers
+lambda=0.6*K; # arrival rate
+mu=1;         # service rate
+
+simulate_MMNN(lambda,mu,K);
+
+```
+
+
+### M/M/K/K queueing model + expiration rate
+
+Let us now go further. Building on the M/M/K/K queue, we want to add the feature that when a server becomes idle-on, it becomes cold by itself after a scale down delay, or \emph{expiration time}, provided that during such time the server received no job. This scale-down rule is common in serverless computing platforms.
+
+To model this, 
+
+The $M/M/K/K$ queue can be described by a continuous-time Markov chain with state space $S=\{0,1,\ldots,N\}$ and transition matrix $Q=(q_{i,j})$ where all the non-zero elements are $q_{i,i+1}=\lambda$ for all $i=0,\ldots,K-1$ and $q_{i,i-1}=i \mu $ for all $i=1,\ldots,K$.
+
+Let us write a code to simulate this Markov chain in continuous time.
+
+<br>
