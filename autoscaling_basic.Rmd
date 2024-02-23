@@ -15,6 +15,7 @@ A server is also said \emph{idle-on} if warm but not processing any job, and \em
 Typically, billing policies charge per number of warm and initializing servers used per time unit.
 
 Our aim is to evaluate the performance of some basic auto-scaling models via simulation in R.
+More specifically, we will be interested in performance measures related to idle-on servers, which correspond to energy waste.
 
 
 ### M/M/K/K queueing model
@@ -24,6 +25,8 @@ A first basic model for autoscaling is given by a $M/M/K/K$ queue. Here, the int
   1. a server becomes cold immediately after processing a job (or equivalently, the expiration rate is very high so that it can be ignored).
   
   2. servers cannot enter the initialization phase (or equivalently, the initialization rate is very high so that it can be ignored).
+
+Therefore, no idle-on server will actually exist within this model.
 
 The $M/M/K/K$ queue can be described by a continuous-time Markov chain with state space $S=\{0,1,\ldots,K\}$ and transition matrix $Q=(q_{i,j})$ where all the non-zero elements are $q_{i,i+1}=\lambda$ for all $i=0,\ldots,K-1$ and $q_{i,i-1}=i{\mu}$ for all $i=1,\ldots,K$.
 Here, $\lambda$ is the arrival rate of jobs and $\mu$ is the service rate of each server.
@@ -38,7 +41,7 @@ simulate_MMKK <- function(lambda, mu, K){
   N=1e5; # number of events to simulate;
 
   p_reject=0; # blocking probability
-  p_reject_transient=rep(N, 0); # transient blocking probability
+  p_reject_transient=rep(0,N); # transient blocking probability
   T=0; # simulation time
   
   # a state is the number of jobs (or warm servers) currently in the system
@@ -101,7 +104,7 @@ Let's simulate.
 knitr::opts_chunk$set(echo = TRUE)
 
 set.seed(13); # Set seed for reproducibility
-K=10;         # number of servers
+K=50;         # number of servers
 lambda=0.6*K; # arrival rate
 mu=1;         # service rate
 
@@ -114,7 +117,10 @@ simulate_MMKK(lambda,mu,K);
 
 Let us now go further. Building on the M/M/K/K queue, we want to add the feature that when a server becomes idle-on, it goes cold by itself after a (non-negligible) scale down delay, or \emph{expiration time}, provided that during such time the server received no job. This scale-down rule is common in serverless computing platforms.
 
-Our goal here is **to calculate (by simulation) the fraction of jobs that find no idle-on server when they arrive**. Let's refer to this probability as $p_{\rm wait}$.
+By simulation, our goal here is to
+
+  1. **calculate the fraction of jobs that find no idle-on server when they arrive**, which we will refer to as $p_{\rm wait}$.
+  2. **evaluate the stationary distribution of the number of idle-on servers**.
 
 Let us first model this setting. We define a continuous-time Markov chain with state space $S=\{(i,j)\in\mathbb{N}^2:i+j\le N\}$ where $i$ resp. $j$ represents the number of busy resp. idle-on servers. The transition rate matrix $Q=(q_{i,j})$ where, from a generic state $(i,j)$, the non-zero rates are
 $$
@@ -140,7 +146,9 @@ simulate_MMKK_plus_expiration <- function(lambda, mu, gamma, K){
   num_jobs=0;      # overall number of jobs that arrived
   num_jobs_wait=0; # overall number of jobs that found no idle-on server upon arrival
   
-  p_wait_transient=rep(N, 0);
+  p_wait_transient=rep(0,N);
+  p_dist_idleon=rep(0,K+1); # probability distribution of idle-on servers
+
   T=0; # simulation time
   
   # a state is the pair (busy, idleon). 
@@ -152,6 +160,8 @@ simulate_MMKK_plus_expiration <- function(lambda, mu, gamma, K){
     time_in_state=rexp(1,U);
     T=T+time_in_state;
 
+    p_dist_idleon[idleon+1]=p_dist_idleon[idleon+1]+time_in_state;
+    
     rnd=runif(1)
     if (rnd<lambda/U){
       # An arrival occurred
@@ -187,8 +197,14 @@ simulate_MMKK_plus_expiration <- function(lambda, mu, gamma, K){
   # Print p_wait
   print(paste("p_wait = ",p_wait));
   events=1:N;
-  plot(events, p_wait_transient, type = "l", lty = 1)
-  legend("bottomright", legend = c("Transient behavior of p_wait"), col=1:1, pch=1);
+  plot(events, p_wait_transient, type = "l", lty = 1);
+  legend("topright", legend = c("Transient behavior of p_wait"), col=1:1, pch=1);
+
+  states=0:K;
+  p_dist_idleon=p_dist_idleon/T;
+  plot(states, p_dist_idleon, type = "l", lty = 1);
+  legend("topright", legend = c("PMF of idle-on servers"), col=1:1, pch=1);
+
 }
 ```
 
@@ -199,7 +215,7 @@ Let's simulate.
 knitr::opts_chunk$set(echo = FALSE)
 
 set.seed(10); # Set seed for reproducibility
-K=10;         # number of servers
+K=50;         # number of servers
 lambda=0.6*K; # arrival rate
 mu=1;         # service rate
 gamma=0.25;   # expiration rate
@@ -208,8 +224,11 @@ simulate_MMKK_plus_expiration(lambda,mu,gamma,K);
 
 ```
 
+Note the probability mass function of the idle-on servers: does it look familiar?
+
+
 ###  [HOMEWORK] M/M/K/K queueing model + expiration rate + initialization rate
 
-The natural step forward is to develop a model and associated code that includes non-negligible initialization rates (say $\alpha$ is the rate at which a server goes from cold to warm). How does the state space and transition rate matrix change?
+The natural step forward is to develop an extended model (with an associated code) that also includes non-negligible initialization rates; say that $\alpha$ is the rate at which a server goes from cold to warm. How does the state space and transition rate matrix change?
 
-<br><br><br>
+<br><br>
