@@ -7,9 +7,9 @@ output: html_document
 
 ### Auto-scaling
 
-Auto-scaling is a powerful mechanism for the efficient management of serverless, edge and cloud computing systems, both from the perspective of user-perceived performance and overall power consumption. It allows the *net* service capacity to scale up or down in response to the current load and the latter distributes incoming jobs across the set of available servers. 
+Auto-scaling is a powerful mechanism for the efficient management of serverless, edge and cloud computing systems, both from the perspective of user-perceived performance and overall power consumption. It allows the *net* service capacity to scale up or down in response to the current load and the latter distributes incoming jobs across the set of available servers [1,2]. 
 
-In auto-scaling systems, servers can be in three states: warm, cold and initializing. A server is said \emph{warm} if turned on, \emph{cold} if turned off and \emph{initializing} if making the transition from cold to warm.
+In auto-scaling systems, servers can be in three states: warm, cold and initializing. A server is said \emph{warm} if turned on, \emph{cold} if turned off and \emph{initializing} if making the transition from cold to warm [1].
 An initializing server performs basic startup operations such as connecting to database, loading libraries, etc. This is the time to provision a new function instance. Only warm servers are allowed to receive jobs.
 A server is also said \emph{idle-on} if warm but not processing any job, and \emph{busy} if warm and processing some job.
 Typically, billing policies charge per number of warm and initializing servers used per time unit.
@@ -38,7 +38,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 simulate_MMKK <- function(lambda, mu, K){
   
-  N=1e5; # number of events to simulate;
+  N=2e5; # number of events to simulate;
 
   p_reject=0; # blocking probability
   p_reject_transient=rep(0,N); # transient blocking probability
@@ -141,7 +141,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 simulate_MMKK_plus_expiration <- function(lambda, mu, gamma, K){
   
-  N=1e5; # number of events to simulate;
+  N=2e5; # number of events to simulate;
 
   num_jobs=0;      # overall number of jobs that arrived
   num_jobs_wait=0; # overall number of jobs that found no idle-on server upon arrival
@@ -152,7 +152,7 @@ simulate_MMKK_plus_expiration <- function(lambda, mu, gamma, K){
   T=0; # simulation time
   
   # a state is the pair (busy, idleon). 
-  busy=0; idleon=K;  #initial state 
+  busy=0; idleon=floor(K/2);  #initial state 
    
   for (i in 1:N) {
   
@@ -193,6 +193,7 @@ simulate_MMKK_plus_expiration <- function(lambda, mu, gamma, K){
   }
   
   p_wait=num_jobs_wait/num_jobs;
+  p_dist_idleon=p_dist_idleon/T;
 
   # Print p_wait
   print(paste("p_wait = ",p_wait));
@@ -200,35 +201,100 @@ simulate_MMKK_plus_expiration <- function(lambda, mu, gamma, K){
   plot(events, p_wait_transient, type = "l", lty = 1);
   legend("topright", legend = c("Transient behavior of p_wait"), col=1:1, pch=1);
 
-  states=0:K;
-  p_dist_idleon=p_dist_idleon/T;
-  plot(states, p_dist_idleon, type = "l", lty = 1);
-  legend("topright", legend = c("PMF of idle-on servers"), col=1:1, pch=1);
-
+  return(p_dist_idleon);
 }
+
 ```
 
-
-Let's simulate.
+Now, let's simulate. If a time unit is 10 milliseconds, which corresponds to the mean service time of jobs in several serverless computing applications, a realistic choice for the expiration rate is $\gamma=0.01$ or lower [1,2,3].
 
 ```{r eval=TRUE, include=TRUE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 
 set.seed(10); # Set seed for reproducibility
-K=50;         # number of servers
-lambda=0.6*K; # arrival rate
-mu=1;         # service rate
-gamma=0.25;   # expiration rate
 
-simulate_MMKK_plus_expiration(lambda,mu,gamma,K);
+K=50;         # number of servers
+lambda=0.3*K; # arrival rate
+mu=1;         # service rate
+gamma=0.01;   # expiration rate
+
+p_io<-simulate_MMKK_plus_expiration(lambda,mu,gamma,K);
+
+states=0:K;
+plot(states, p_io, type = "l", lty = 1, col=1, lwd=2, xlab="Number of idleon servers");
+grid(nx = NULL, ny = NULL, lty = 2, col = "lightgray", lwd = 1)
+
+mean_idleon = sum((0:(length(p_io)-1))*p_io);
+var_idleon  = sum( ((0:(length(p_io)-1))**2) * p_io) - mean_idleon**2;
+std_idleon  = sqrt(var_idleon);
+
+cat(paste("mean number of idleon servers = ", mean_idleon, sep=""), '\n');
+cat(paste("variance of idleon servers = ", var_idleon, sep=""), '\n');
+
 
 ```
 
 Note the probability mass function of the idle-on servers: does it look familiar?
+To answer this question, we look for some candidate probability mass functions that may approximate the shape obtained in the above plot - of course, we can always compute the distribution by solving the global balance equatons of the underlying Markov chain, but this is not the goal now.
+Possible candidates are the binomial and the Poisson distribution.
+After some numerical attempts, one notice that these models do not really justify the simulation data, so we rule them out.
+Another alternative is to see whether the empirical distribution fits a Gaussian model. Since the Gaussian model takes negative values, which in principle we do not want to consider, a patch would consist in conditioning over the positive values of the given Gaussian.
+We now test both of these models.
+
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+set.seed(10); # Set seed for reproducibility
+
+K=50;         # number of servers
+lambda=0.3*K; # arrival rate
+mu=1;         # service rate
+gamma=0.01;   # expiration rate
+
+p_io<-simulate_MMKK_plus_expiration(lambda,mu,gamma,K);
+
+states=0:K;
+plot(states, p_io, type = "l", lty = 1, col=1, lwd=2, xlab="Number of idleon servers");
+
+mean_idleon = sum((0:(length(p_io)-1))*p_io);
+var_idleon  = sum( ((0:(length(p_io)-1))**2) * p_io) - mean_idleon**2;
+std_idleon  = sqrt(var_idleon);
+
+cat(paste("mean number of idleon servers = ", mean_idleon, sep=""), '\n');
+cat(paste("variance of idleon servers = ", var_idleon, sep=""), '\n');
+
+# Gaussian model
+s_ <- 0:K; lines(s_, dnorm(s_, mean_idleon, std_idleon),type='l', lty = 2,col=2, lwd=2);
+
+# Conditioned Gaussian model 
+s_ <- 0:K; lines(s_, dnorm(s_, mean_idleon, std_idleon)/(1-pnorm(0, mean_idleon, std_idleon)),type='l',lty = 2,col=3, lwd=2);
+grid(nx = NULL, ny = NULL, lty = 2, col = "lightgray", lwd = 1)
+
+legend("topright", legend = c("PMF of idle-on servers", "Gaussian", "Gaussian | Gaussian>0"), col=1:3, pch=1);
+
+```
+
+Both of these models seem to well justify the data! Some questions for further investigation:
+
+  1. Are these models robust to realistic changes in the model data?
+  
+  2. Even though both models justify the data, they have a drawback: the parameters of the Gaussian used above depend on the distribution of exactly what we want to model! Can we approximate them simply in terms of the model parameters?
+
+
 
 
 ###  [HOMEWORK] M/M/K/K queueing model + expiration rate + initialization rate
 
 The natural step forward is to develop an extended model (with an associated code) that also includes non-negligible initialization rates; say that $\alpha$ is the rate at which a server goes from cold to warm. How does the state space and transition rate matrix change?
+
+
+### References
+
+[1] N. Mahmoudi and H. Khazaei. "Performance modeling of serverless computing platforms". IEEE Transactions on Cloud Computing, 2020.
+
+[2] J. Anselmi "Asynchronous Load Balancing and Auto-scaling: Mean-field Limit and Optimal Design", IEEE/ACM Transactions on Networking, 2024
+
+[3] L. Wang, M. Li, Y. Zhang, T. Ristenpart, and M. Swift. "Peeking behind the curtains of serverless platforms". In Proceedings of the 2018 USENIX Conference on Usenix Annual Technical Conference, 2018
 
 <br><br>
