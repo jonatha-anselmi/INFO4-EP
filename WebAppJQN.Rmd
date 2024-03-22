@@ -1,0 +1,196 @@
+---
+title: "Web Application - Jackson Queueing Network"
+author: "Jonatha Anselmi"
+date: "March 26, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+**TD: "Performance Modelling, Evaluation and Optimization of a Web Application", Évaluation de Performance 2021, Polytech Grenoble.**
+
+
+
+### System Description
+
+A web application is hosted on a computer system composed of a front-end web-server (F) and $M$ identical parallel back-end application servers, say $B_1,\ldots,B_M$. The incoming requests, or jobs, join and leave the system only through F, and they can access the application servers only after visiting F. After completion at F, a job may visit one application server and in this case it is chosen uniformly at random.
+All servers operate under the First-Come First-Served scheduling discipline.
+
+After a measurement study, it has been observed that:
+
+<ul  class="org-ul">
+<li> the probability that a job leaves the system after service at F is $p_{F,0}=0.2$</li>
+<li> 15 jobs/second join the system in average</li>
+<li> the mean service time at F is 10 milliseconds</li>
+<li> the mean service time at any backend server Bi is 50 milliseconds</li>
+</ul>
+
+The objective is to identify a model and to evaluate and optimize the performance of the system dscribed above.
+In particular, we are interested in the minimal number of back-end servers $M$ that keep the mean delay below $D_{\max}=500$ milliseconds.
+
+
+### Jackson Queueing Network Modelling
+
+We model the dynamics of jobs in the system by means of a Jackson queueing network with $M+1$ queues.
+Towards this purpose, we assume that
+<ul  class="org-ul">
+<li> jobs arrive through a Poisson process with rate $\lambda=0.015$ jobs/ms</li>
+<li> the sequence of service times at F are exponentially distributed independent randon variables with rate $\mu_F=0.1$ job/ms </li>
+<li> the sequence of service times at $B_i$ are exponentially distributed independent randon variables with rate $\mu=0.02$ job/ms, for all $i=1,\ldots,M$ </li>
+</ul>
+Consistently with the system description, for the routing probabilities we assume that $p_{F,B_i}=0.8/M$ and $p_{B_i,F}=1$, for all $i=1,\ldots,M$.
+For the external arrival probabilities, $p_{0,F}=1$, and
+for the exit probabilities, $p_{F,0}=0.2$.
+
+This modelling identifies a Jackson queueing network.
+
+
+### Steady-state probabilities and Stability
+
+
+Letting $n=(n_F,n_{B_1},\ldots,n_{B_M})$ denote the number of jobs in all servers, we are interested in the steady-state probability that servers contains $n$ jobs. 
+
+By applying Jackson's theorem we have
+$$
+\pi(n) = \left(\frac{\lambda_{F}}{\mu_F}\right)^{n_{M+1}} \left(1-\frac{\lambda_{F}}{\mu_F}\right) 
+\,\prod_{i=1}^{M} \left(\frac{\lambda_{B_i}}{\mu}\right)^{n_i} \left(1-\frac{\lambda_{B_i}}{\mu}\right)
+$$
+where $\lambda_{F}$ and $\lambda_{B_i}$ are given by the unique solution of the traffic equations:
+$\lambda_{F} = \lambda + \sum_{i=1}^M \lambda_{B_i}$
+and
+$\lambda_{B_i} = \lambda_F \,\,p_{F,B_i}$.
+This gives 
+$$\lambda_F = \frac{\lambda}{p_{F,0}} = 0.075$$
+and
+$$\lambda_{B_i} = \frac{1-p_{F,0}}{p_{F,0}} \, \frac{\lambda}{M} = \frac{0.06}{M}.$$
+
+From this we conclude that stability is obtained if and only if $0.06<M\mu$, that is if $M>3$.
+
+ 
+### Performance Evaluation and Optimization
+
+We are interested in the mean response time (or delay), say $R$, that is the overall time that a job spends in the system.
+Since for the average number of visits per job on servers $F$ resp. $B_i$ is $v_F=\frac{\lambda_F}{\lambda}$ resp. $v_{B_i}=\frac{\lambda_{B_i}}{\lambda}$, we obtain
+$$
+R = v_F R_F + \sum_{i=1}^M v_{B_i} R_{B_i}
+$$
+where $R_{F}$ and $R_{B_i}$ are response time of servers $F$ and $B_i$, respectively.
+By applying Little's law, $R_{F} = Q_{F}\lambda_{F}$ and $R_{B_i} = Q_{B_i}\lambda_{B_i}$
+where $Q_{F}$ and $Q_{B_i}$ are the mean number of jobs in servers $F$ and $B_i$.
+Using $\pi(n)$, we have
+$$
+Q_F = \frac{\lambda_F/\mu_F}{1-\lambda_F/\mu_F},\qquad 
+Q_{B_i} = \frac{\lambda_{B_i}/\mu}{1-\lambda_{B_i}/\mu}
+$$
+and after some algebra
+\begin{align}
+R & = \frac{R_F}{p_{F,0}}  + \sum_{i=1}^M \frac{1-p_{F,0}}{p_{F,0}} \, \frac{1}{M} R_{B_i}\\
+% 
+& = \frac{1}{p_{F,0}}\frac{1}{\mu_F-0.075}  +  \frac{1-p_{F,0}}{p_{F,0}} \, \frac{1}{\mu-\frac{0.06}{M}}\\
+% 
+& = 200  +   \frac{4}{0.02-\frac{0.06}{M}}.
+\end{align}
+Note that we may have found $R$ by using Little's law differently, that is, using that $R$ satisfies $\lambda R= Q_{F} + \sum_{i} Q_{B_i}$.
+
+Therefore, to ensure that $R\le D_{\max}$, we need to find the smallest integer $M$ such that $200  +   \frac{4}{0.02-\frac{0.06}{M}}\le D_{\max}$. This gives
+\begin{align}
+M \ge \frac{3}{1 - \frac{1}{\frac{D}{200}-1 } }
+ \end{align}
+and for $D=500$ we obtain $M=9$.
+
+Finally, what if $D_{\max}=300$ms?
+
+
+
+### Simulation of the underlying Markov chain
+
+In order to see the transient dynamics of jobs inside the network,
+we want to simulate the Markov chain underlying the Jackson queueing network above.
+
+Simulation is especially useful when the underlying Markov chain is not "tractable". This is not the case here but it would be if, for instance, the distribution of service times would be general.
+
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+set.seed(5);  # Set seed for reproducibility
+N=1e6;        # number of events to simulate;
+
+M=9;          # number of back-end servers
+lambda=0.015; # arrival rate
+mu_F=0.1;     # front-end server (F) service rate 
+mu=0.02;      # back-end servers (Bi) service rate
+
+pF0=0.2;      # Probability a job leaves the network after visiting F
+
+n = rep(M+1, x=0); # state: n(1) is the number of jobs in F and for i>1, n(i+1) is the number of jobs in Bi
+
+outrate=lambda+mu_F+M*mu;
+
+Q = rep(M+1, x=0); # average queue lengths
+
+ResponseTime=rep(N, x=0);
+
+for (i in 1:N) {
+
+  event=runif(1)*outrate;
+  
+  if (event<lambda){
+    # an arrival occurred, necessarily to F
+    n[1]=n[1]+1;
+  }
+
+  if (lambda<event & event <lambda+mu_F){
+    # a potential departure from F occurred
+    if (n[1]>0){
+        n[1]=n[1]-1;
+      
+        if (runif(1)>pF0){
+          # the job joins a random backend server
+          j=sample(1:M,1);
+          n[j+1]=n[j+1]+1;
+        } # otherwise it leaves the network and nothing has to be done
+    }
+  }
+
+  tmp=lambda+mu_F;
+  for (j in 1:M){
+    if (tmp<event & event<tmp+mu) {
+      # a potential departure from backend server Bj occurred
+      if (n[j+1]>0){
+        n[j+1]=n[j+1]-1;
+        n[1]=n[1]+1;
+      }
+    }
+    tmp=tmp+mu;
+  }
+
+  # update average queue lenghts
+  Q=Q+n;
+  ResponseTime[i] = sum(Q)/(i*lambda); # Little's law
+
+}
+
+# average queue lengths
+Q=Q/N;
+ResponseTime_theory=0;
+if (mu-lambda*(1-pF0)/(pF0*M)>0) {
+  ResponseTime_theory = (1/pF0)/(mu_F-lambda/pF0) + ((1-pF0)/pF0)/(mu-lambda*(1-pF0)/(pF0*M));
+} else {
+  print("The system is not stable: Response Time -> +oo")  
+}
+
+# Print the Response Times (simulation and theory)
+events=1:N;
+plot(events, ResponseTime, type = "l", lty = 1)
+abline(h = ResponseTime_theory, col="red")
+
+print(tail(ResponseTime,1))
+print(ResponseTime_theory)
+
+```
+
+
