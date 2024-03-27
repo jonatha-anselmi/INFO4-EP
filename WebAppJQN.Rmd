@@ -1,13 +1,9 @@
 ---
-title: "Web Application - Jackson Queueing Network"
+title: "Web Application - Jackson Queueing Network<br><small>Évaluation de Performances 2024, TD #2, INFO4, Polytech Grenoble</small>"
 author: "Jonatha Anselmi"
 date: "March 26, 2021"
 output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 
 **TD: "Performance Modelling, Evaluation and Optimization of a Web Application", Évaluation de Performance 2021, Polytech Grenoble.**
@@ -116,10 +112,12 @@ Simulation is especially useful when the underlying Markov chain is not "tractab
 ```{r eval=TRUE, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 
-set.seed(5);  # Set seed for reproducibility
+set.seed(5);  # set seed for reproducibility
 N=1e6;        # number of events to simulate;
 
 M=9;          # number of back-end servers
+
+# time units in milliseconds
 lambda=0.015; # arrival rate
 mu_F=0.1;     # front-end server (F) service rate 
 mu=0.02;      # back-end servers (Bi) service rate
@@ -192,5 +190,130 @@ print(tail(ResponseTime,1))
 print(ResponseTime_theory)
 
 ```
+
+
+### Closing the queueing network
+
+Now, we consider the same setting as above but we "close" the network.
+That is, upon leaving the (open) network above, a job enters an auxiliary multiserver queue $-/M/K/K$ queue, and after receiving processing, it rejoins the frontend server. Therefore, no job arrivals/departures occur in/from the network.
+To parameterize the network, it remains to specify the service rate of the multiserver queue (let's denote it by $\lambda$ for each server) and the overall number of jobs that circulate in the network. We assume that the latter is $N$ so that jobs never actually wait in the additional queue. In fact, this queue is meant to model the **think time** of a job (interpreted as a customer), which is not affected by the interaction with the other jobs.
+
+#### Objective
+
+Let us assume that the think time (i.e., $1/\lambda$) is 5 seconds (the time to read the answer of the webapp!) and let's keep $M=9$, which in the open network ensured a maximum mean delay of $500$ms when the external arrival rate was 15 job/sec.
+Then, we are interested in the following question:
+
+
+**How many jobs induce a *throughput* of 15 jobs/sec?** 
+We define the throughput as the rate at which jobs leave the multiserver queue.
+
+We may answer this question by numerically solving the global balance equations associated to the underlying Markov chain, or by running efficient solution algorithms such Mean Value Analysis (MVA) or the Convolution Algorithm. However, the goal here is to use simulation. 
+
+### Simulation of the closed network
+
+Let's adapt the code for the open network above. But this time let's use a slightly different simulation concept. Instead of using a uniformization constant as above, we adapt `outrate` as a function of the current state.
+
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+set.seed(4);  # Set seed for reproducibility
+
+# K=50;         # number of jobs circulating in the network
+
+compute_throughput <- function(K) {
+    
+    N=1e5;        # number of events to simulate;
+    M=9;          # number of back-end servers
+    
+    # time units in milliseconds
+    lambda=1/(5*1000);   # service rate of each server of the auxiliary new queue (1/seconds)
+                  # or, equivalently, the inverse of the mean think time
+    mu_F=0.1;     # front-end server (F) service rate 
+    mu=0.02;      # back-end servers (Bi) service rate
+    pF0=0.2;      # Probability that a job leaves the network after visiting F
+    n = rep(M+2, x=0); # state: n(1) is the number of jobs in F and for i>1, n(i+1) is the number of jobs in Bi
+    n[M+2]=K;     # set an initial condition
+    
+    Q = n; # average queue lengths
+    
+    ResponseTime=rep(N, x=0);
+
+    sim_time=0;    
+    for (i in 1:N) {
+
+      outrate=lambda*n[M+2];
+      if (n[1]>0) {outrate=outrate+mu_F;}
+      for (j in 1:M) { if (n[1+j]>0) {outrate=outrate+mu;}}
+
+      event=runif(1)*outrate;
+      
+      # a potential departure from the multiserver queue occurred 
+      if (event<lambda*n[M+2]) {
+        n[1]=n[1]+1;
+        n[M+2]=n[M+2]-1;
+      }
+    
+      tmp=lambda*n[M+2];
+      if (n[1]>0) {
+          tmp=tmp+mu_F;
+          if (lambda*n[M+2]<event & event <lambda*n[M+2]+mu_F) {
+                n[1]=n[1]-1;
+                if (runif(1)>pF0) {
+                  # the job joins a random backend server
+                  j=sample(1:M,1);
+                  n[j+1]=n[j+1]+1;
+                } else {
+                    n[M+2]=n[M+2]+1;
+                } # otherwise it leaves the web app and think
+          }
+      }
+    
+      n_app_servers=n[-1];
+      n_app_servers=n_app_servers[-length(n_app_servers)];
+      busy_app_servers=(1:M)[n_app_servers>0];
+      for (j in busy_app_servers){
+        if (tmp<event & event<tmp+mu) {
+            # a departure from backend server Bj occurred
+            n[j+1]=n[j+1]-1;
+            n[1]=n[1]+1;
+        }
+        tmp=tmp+mu;
+      }
+      
+      # update time average queue lenghts
+      time_in_state_n=rexp(1,outrate);
+      Q=Q+n*time_in_state_n;
+      sim_time=sim_time+time_in_state_n;
+
+    }
+
+    # average queue lengths
+    Q=Q/sim_time;
+    txt=paste("Avg queue lengths (K=",K,"): ", sep="");
+    cat(paste(c(txt, round(Q,digits=2)),collapse=" "));
+    cat('\n');
+    cat(paste("Throughput (K=",K,"): ", round(Q[M+2]*lambda*1000, digits=3),"jobs/sec", sep=""),'\n');
+    # return the throughput
+    return( Q[M+2]*lambda );
+}
+
+K_values=(1:20)*10;
+throughput=c();
+for (K in K_values) {
+    throughput=c(throughput,compute_throughput(K));
+}
+
+plot(K_values, throughput*1000,
+        type = "b", pch = 19, 
+        xlab="Number of jobs (K)", 
+        ylab="Throughput (jobs/sec)", 
+        lwd=3,      # Line width
+        lty = 1)
+abline(h = 15, col="red")
+
+
+```
+
 
 
