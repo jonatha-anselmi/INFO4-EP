@@ -1,7 +1,7 @@
 ---
 title: "Response time minimization in two parallel queues<br><small>Évaluation de Performances 2024, TD #2, INFO4, Polytech Grenoble</small>"
 author: "Jonatha Anselmi"
-date: "2024-02-22"
+date: "2024-02-28"
 output: html_document
 ---
 
@@ -15,8 +15,7 @@ The goal is to find the probability $p^*$ that minimizes the mean waiting time.
 
 Unfortunately, no exact formula is available for the mean waiting time of the G/G/1 queue in general.
 Given this difficulty, we can approach this problem either by simulation or by approximations.
-In the former case, we rely on Lindley's equation (no need to use [the general code written for the G/G/1 queue](https://rpubs.com/janselmi/GG1_scheduling_disciplines)) while in the latter, we assume that the arrival process is Poisson and  rely on the Pollaczek–Khinchine formula.
-We will assess the accuracy of the approximation given by the Pollaczek–Khinchine formula with respect to the optimal probability computed via simulation.
+In the former case, we rely on Lindley's equation (no need to use [the general code written for the G/G/1 queue](https://rpubs.com/janselmi/GG1_scheduling_disciplines)) while in the latter, we assume that the arrival process is Poisson and rely on the Pollaczek–Khinchine formula. We will assess the accuracy of the approximation given by the Pollaczek–Khinchine formula with respect to the optimal probability computed via simulation.
 
 
 ### Assumptions
@@ -50,12 +49,12 @@ This quartic equation is not trivial to solve analytically, but we can always so
 For all $n=1,2,\ldots,N$, let $W_{1,n}$ and $W_{2,n}$ denote the waiting times of the $n$-th job joining the system if it is sent to queue 1 and 2, respectively; we can assume $W_{1,n}=W_{2,n}=0$.
 Using Lindley's equation, for $i=1,2$ we obtain
 $$
-W_{i,n+1} = 
+W_{i,n+1} = \max \left(W_{i,n} +  \frac{S_n}{\mu_i}\,I_{(U_{n}=i)} - A_n, \,0 \right)
 $$
 where $U_{n}=i$ if job $n$ was sent to $i$, $I_E$ is the indicator function of the event $E$, $A_n$ denotes the inter-arrival time between jobs $n$ and $n+1$, and $S_n$ is the job size of job $n$.
 Now, we write a code that iterates over this equation and plots the average waiting time $\frac{1}{N}\sum_{n=1}^N W_n$ as a function of $p$.
 
-```{r setup, include=TRUE}
+```{r, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 
 LB_random <- function(N,p,mu,InterArrival,JobSize) {      
@@ -66,11 +65,12 @@ LB_random <- function(N,p,mu,InterArrival,JobSize) {
   for (n in 1:N) #for each job
   {
     # Dispatching decision of RANDOM
-    ... 
+    U = sample(x=1:2,1, prob = c(p,1-p)); 
     for (k in 1:2) #for each server
     {
       # Update the waiting time of server k (Lindley's recursion)
-      ...
+      WaitingTime[k] = max(WaitingTime[k] + ifelse(U==k,1,0)*JobSize[n]/mu[k] - InterArrival[n], 0);
+      # WaitingTime[k] = max(WaitingTime[k] + (U==k)*JobSize[n]/mu[k] - InterArrival[n], 0);
     }
     WaitingTimeCum[U] = WaitingTimeCum[U]+WaitingTime[U];
   }
@@ -94,7 +94,11 @@ mu = c(1,3);
 # Job size Scenario 2
 JobSize=rexp(N,1); # Job sizes
 ES=1;  # E[S]:   Expected value of job sizes
-ES2=1; # E[S^2]: Second moment of job sizes
+ES2=2; # E[S^2]: Second moment of job sizes
+
+rho=0.8; # network load to test: lambda*E[S]/(mu_1+mu_2)
+
+lambda = rho*sum(mu)/ES; # arrival rate
 
 # For stability, we want lambda*p*ES<mu[1] AND lambda*(1-p)*ES<mu[2] 
 # Therefore, p < mu[1]/(ES*lambda) AND p > 1-mu[2]/(lambda*ES)
@@ -104,11 +108,8 @@ step=(p_max-p_min)/10;
 p_values=seq(p_min, p_max, step);
 W_RANDOM=rep(NA,length(p_values));
 
-rho=0.8; # network load to test: lambda*E[S]/(mu_1+mu_2)
-
-lambda = rho*sum(mu)/ES; # arrival rate
-InterArrival = rexp(n=N, rate = lambda);           # Inter-arrival times: Poisson
-# InterArrival = runif(n=N, min = 0, max=2/lambda);    # Inter-arrival times: Uniform
+# InterArrival = rexp(n=N, rate = lambda);           # Inter-arrival times: Poisson
+InterArrival = runif(n=N, min = 0, max=2/lambda);    # Inter-arrival times: Uniform
 
 cnt=1;
 for (p in p_values) 
@@ -143,15 +144,95 @@ grid(nx = NULL, ny = NULL, lty = 2, col = "lightgray", lwd = 1)
 
 ```
 
-The optimal average waiting times returned by the approximation and by the simulation may be close to each other. What matters most is that the *the optimal routing probabilities returned by the approximation and by the simulation are very close to each other*.
-Therefore, the Poisson approximation seems to work well, in theory.
+Even assuming that the interarrival times follow a uniform distribution, from the plot we deduce that *the optimal routing probabilities returned by the approximation and by the simulation are very close to each other* .
+The Poisson approximation seems to work well.
+
 
 ### Arrival times from a real HPC workload
 
 Now, let's look at the quality of the Poisson approximation when the arrival times are taken from a real High Performance Computing (HPC) workload.
 Real data traces are available from the [Parallel Workloads Archive](http://www.cs.huji.ac.il/labs/parallel/workload/logs.html).
 
+We consider the [KIT dataset](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/datasets/KIT.txt).
 
+
+```{r, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Import in the environment the KIT dataset, i.e., datasets/KIT.txt
+# https://github.com/jonatha-anselmi/INFO4-EP/blob/main/datasets/KIT.txt
+
+KIT = read.table('datasets/KIT.txt',sep=' ')
+Arrival=KIT$V1;  Service=KIT$V2;  Need=KIT$V3;
+
+# Remove the first J jobs
+J=2; Arrival=Arrival[-(1:J)]; 
+# Service=Service[-(1:J)]; Need=Need[-(1:J)];
+
+Arrival=Arrival-Arrival[1]; # start from time t=0 
+
+
+plot(Arrival, main=paste("Arrival times curve (", length(Arrival) ," jobs)", sep=""), xlab="time", ylab="Number of jobs arrived")
+grid(nx = NULL, ny = NULL, lty = 2, col = "lightgray", lwd = 1)
+
+InterArrival=Arrival[-1]-Arrival[-length(Arrival)] 
+InterArrival=InterArrival/mean(InterArrival); # let's normalize so that the arrival rate is 1
+lambda=1;
+N=length(InterArrival); # number of jobs
+
+# Assume exponential(1) job sizes
+JobSize=rexp(N,1); # Job sizes
+ES=1;  # E[S]:   Expected value of job sizes
+ES2=2; # E[S^2]: Second moment of job sizes
+
+rho = 0.8; # Let's fix the load
+mu  = c(2,3);
+mu  = (c(2,3)/sum(mu))/rho;
+
+p_min=0.1;
+p_max=0.9;
+step=(p_max-p_min)/10;
+p_values=seq(p_min, p_max, step);
+cnt=1;
+for (p in p_values) 
+{
+    W_RANDOM[cnt]=LB_random(N,p,mu,InterArrival,JobSize);
+    cat(paste("Avg Waiting Time (p=", round(p,digits=3), ")=", round(W_RANDOM[cnt],digits=3),sep=""), "\n");
+    cnt=cnt+1;
+}
+
+
+# function to optimize: W(p)
+my_fun=function(p,lambda,mu,ES2) 0.5*ES2*((lambda*p^2)*( (1/mu[1])^2)/(1-lambda*p/mu[1]) + (lambda*(1-p)^2)*((1/mu[2])^2)/(1-lambda*(1-p)/mu[2]))
+res<-optimize(my_fun,lower=p_min,upper=p_max,p,lambda,mu,ES2,maximum=FALSE)
+W_approx=res$objective;
+p_star_approx=res$minimum;
+cat(paste("Optimal waiting time and probability given by the approximation: W*=", 
+    round(W_approx,digits=3), " p*=",round(p_star_approx,digits=3), sep=""), "\n");
+
+
+# plot the results
+plot(p_values, W_RANDOM, xlim=c(p_min,p_max), ylim = c(0, 1.1*mean(W_RANDOM,na.rm = T)),
+     col="blue", lty=1, ylab="",xlab="probability p", type = "b", pch = 19, main=paste("Average Waiting Time W(p)"));
+abline(h = W_approx, col="red", ylab="W*");
+abline(v = p_star_approx, col="red");
+legend("topright",legend=c("Simulation","W_approx"), col=c("blue","red"), pch=c("o","*","+"),lty=c(1,2), ncol=1);
+
+axis(side=1,at=p_star_approx,  labels="p*");
+axis(side=2,at=W_approx,  labels="W*");
+    
+grid(nx = NULL, ny = NULL, lty = 2, col = "lightgray", lwd = 1)
+
+
+```
+
+Let's make some considerations. The arrival curve in the figure above shows that the arrival rate is not constant. To apply the Pollaczek–Khinchine formula and perform a more accurate analysis, we would need to consider a shorter timescale where the arrival rate can be considered constant.
+Nonetheless, the crude approximation above does not produce bad results, the analytical approximation is not far from the optimal one.
+
+
+### [HOMEWORK] Add real service times
+
+Use the KIT dataset and repeat the analysis above including service times.
 
 <br><br>
 
