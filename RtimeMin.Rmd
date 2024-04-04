@@ -30,18 +30,10 @@ Using the Pollaczek–Khinchine formula and the Poisson decomposition property, 
 $$
 W(p) 
 = p W_1(p) + (1-p) W_2(p) 
-= p \times \frac{\lambda p}{2} \frac{ \mathbb{E}[(S/\mu_1)^2]}{1-\lambda p/\mu_1} + (1-p) \times \frac{\lambda (1-p)}{2} \frac{\mathbb{E}[(S/\mu_2)^2]}{1-\lambda(1-p)/\mu_2}
+= p \times \frac{\lambda p}{2} \frac{ \mathbb{E}[(S/\mu_1)^2]}{1-\lambda p\mathbb{E}[S]/\mu_1} + (1-p) \times \frac{\lambda (1-p)}{2} \frac{\mathbb{E}[(S/\mu_2)^2]}{1-\lambda(1-p)\mathbb{E}[S]/\mu_2}
 $$
-and we are interested in minimizing $W(p)$ over $p$. Note that $W(p)$ is strictly convex, so a unique minimizer exists (say $p^*$). Differentiating, we obtain
-$\frac{{\rm d} W(p)}{{\rm d} p} =0$ if and only if
-$$
-\frac{{\rm d} }{{\rm d} p} \left(\frac{1}{\mu_1} \frac{p^2}{\mu_1-\lambda p}  +  \frac{1}{\mu_2} \frac{(1-p)^2}{\mu_2-\lambda(1-p)} \right) = 0
-$$
-i.e., if and only if
-$$
-\frac{1}{\mu_1} \frac{2p\mu_1 - \lambda p^2}{(\mu_1-\lambda p)^2} = \frac{1}{\mu_2} \frac{2(1-p) \mu_2 - \lambda (1-p)^2}{(\mu_2-\lambda(1-p))^2}.
-$$
-This quartic equation is not trivial to solve analytically, but we can always solve it numerically.
+and we are interested in minimizing $W(p)$ over $p$. Note that $W(p)$ is strictly convex, so a unique minimizer exists (say $p^*$). Solving for
+$\frac{{\rm d} W(p)}{{\rm d} p} =0$ is equivalent to solving for a quartic equation. This is non-trivial analytically but of course we can always rely on numerical methods.
 
 
 ### Optimization via simulation
@@ -121,8 +113,8 @@ for (p in p_values)
 
 
 # function to optimize: W(p)
-my_fun=function(p,lambda,mu,ES2) 0.5*ES2*((lambda*p^2)*( (1/mu[1])^2)/(1-lambda*p/mu[1]) + (lambda*(1-p)^2)*((1/mu[2])^2)/(1-lambda*(1-p)/mu[2]))
-res<-optimize(my_fun,lower=p_min,upper=p_max,p,lambda,mu,ES2,maximum=FALSE)
+my_fun=function(p,lambda,mu,ES,ES2) 0.5*ES2*((lambda*p^2)*( (1/mu[1])^2)/(1-lambda*p*ES/mu[1]) + (lambda*(1-p)^2)*((1/mu[2])^2)/(1-lambda*(1-p)*ES/mu[2]))
+res<-optimize(my_fun,lower=p_min,upper=p_max,p,lambda,mu,ES,ES2,maximum=FALSE)
 W_approx=res$objective;
 p_star_approx=res$minimum;
 cat(paste("Optimal waiting time and probability given by the approximation: W*=", 
@@ -153,7 +145,7 @@ The Poisson approximation seems to work well.
 Now, let's look at the quality of the Poisson approximation when the arrival times are taken from a real High Performance Computing (HPC) workload.
 Real data traces are available from the [Parallel Workloads Archive](http://www.cs.huji.ac.il/labs/parallel/workload/logs.html).
 
-We consider the [KIT dataset](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/datasets/KIT.txt).
+We consider the [KIT FH2 dataset](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/datasets/KIT.txt); [further details](https://www.cs.huji.ac.il/labs/parallel/workload/l_kit_fh2/index.html)
 
 
 ```{r, include=TRUE}
@@ -176,6 +168,7 @@ plot(Arrival, main=paste("Arrival times curve (", length(Arrival) ," jobs)", sep
 grid(nx = NULL, ny = NULL, lty = 2, col = "lightgray", lwd = 1)
 
 InterArrival=Arrival[-1]-Arrival[-length(Arrival)] 
+InterArrival=InterArrival+1e4; # to make sure that jobs arrive at different times
 InterArrival=InterArrival/mean(InterArrival); # let's normalize so that the arrival rate is 1
 lambda=1;
 N=length(InterArrival); # number of jobs
@@ -189,8 +182,10 @@ rho = 0.8; # Let's fix the load
 mu  = c(2,3);
 mu  = (c(2,3)/sum(mu))/rho;
 
-p_min=0.1;
-p_max=0.9;
+p_min=0.2;
+p_max=0.55;
+p_min=max(0.98*(1-mu[2]/(lambda*ES)),0);
+p_max=min(0.98*(mu[1]/(ES*lambda)),1);
 step=(p_max-p_min)/10;
 p_values=seq(p_min, p_max, step);
 cnt=1;
@@ -203,8 +198,8 @@ for (p in p_values)
 
 
 # function to optimize: W(p)
-my_fun=function(p,lambda,mu,ES2) 0.5*ES2*((lambda*p^2)*( (1/mu[1])^2)/(1-lambda*p/mu[1]) + (lambda*(1-p)^2)*((1/mu[2])^2)/(1-lambda*(1-p)/mu[2]))
-res<-optimize(my_fun,lower=p_min,upper=p_max,p,lambda,mu,ES2,maximum=FALSE)
+my_fun=function(p,lambda,mu,ES,ES2) 0.5*ES2*((lambda*p^2)*( (1/mu[1])^2)/(1-lambda*p*ES/mu[1]) + (lambda*(1-p)^2)*((1/mu[2])^2)/(1-lambda*(1-p)*ES/mu[2]))
+res<-optimize(my_fun,lower=p_min,upper=p_max,p,lambda,mu,ES,ES2,maximum=FALSE)
 W_approx=res$objective;
 p_star_approx=res$minimum;
 cat(paste("Optimal waiting time and probability given by the approximation: W*=", 
@@ -218,21 +213,20 @@ abline(h = W_approx, col="red", ylab="W*");
 abline(v = p_star_approx, col="red");
 legend("topright",legend=c("Simulation","W_approx"), col=c("blue","red"), pch=c("o","*","+"),lty=c(1,2), ncol=1);
 
-axis(side=1,at=p_star_approx,  labels="p*");
-axis(side=2,at=W_approx,  labels="W*");
-    
 grid(nx = NULL, ny = NULL, lty = 2, col = "lightgray", lwd = 1)
 
+axis(side=1,at=p_star_approx,  labels="p*");
+axis(side=2,at=W_approx,  labels="W*");
 
 ```
 
 Let's make some considerations. The arrival curve in the figure above shows that the arrival rate is not constant. To apply the Pollaczek–Khinchine formula and perform a more accurate analysis, we would need to consider a shorter timescale where the arrival rate can be considered constant.
-Nonetheless, the crude approximation above does not produce bad results, the analytical approximation is not far from the optimal one.
+Nonetheless, the above approximation still brings to accurate results.
 
 
 ### [HOMEWORK] Add real service times
 
-Use the KIT dataset and repeat the analysis above including service times.
+Let's go one step further. Use the KIT FH2 dataset and repeat the analysis above including service times.
 
 <br><br>
 
