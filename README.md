@@ -2,7 +2,7 @@
 
 This is the website for the "Évaluation de Performances" course held at PolyTech INFO4, 2023-2024.
 
-[Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) (Cours) and [Louis-Sebastien Rebuffi](mailto:louis-sebastien.rebuffi@univ-grenoble-alpes.fr) (TD) are in charge of the lectures.
+[Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) is in charge of the lectures.
 
 This course is about theory and practice. Much of the content is dedicated to simulation. We will write code in R and to this end, it is recommended to install [RStudio](https://posit.co/download/rstudio-desktop/). Snippets of code written in class are published at this rpubs link: [https://rpubs.com/janselmi](https://rpubs.com/janselmi)
 
