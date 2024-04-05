@@ -23,5 +23,5 @@ See the [official schedule](https://ade-uga-ro-vs.grenet.fr/direct/index.jsp) wi
 | Week #8 | [Classic Queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_CMTC.pdf)   |  [Basic Auto-scaling](https://rpubs.com/janselmi/basic-autoscaling)
 | Week #9| [Jackson Queueing Networks](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)   | [Modelling a web application: open and closed queueing network](https://rpubs.com/janselmi/webapp)
 | Week #10 | [Closed Queueing Networks](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RICM4_EP_FA.pdf)   |  [Response time minimization in two parallel queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RtimeMin.Rmd)
-| Week #11 | [The M/G/1 Queue and the Pollaczek–Khinchine Formula](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/MG1-PolyTech-INFO4-EP.pdf)   | [Response time minimization, continued](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/RtimeMin.Rmd)
+| Week #11 | [The M/G/1 Queue and the Pollaczek–Khinchine Formula](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/MG1-PolyTech-INFO4-EP.pdf)   | [Size-aware dispatching in two queues](https://github.com/jonatha-anselmi/INFO4-EP/blob/main/size-aware.Rmd)
                                                                                   
