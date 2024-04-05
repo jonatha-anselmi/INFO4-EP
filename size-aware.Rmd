@@ -1,0 +1,168 @@
+---
+title: "Size-aware dispatching in two queues<br><small>Évaluation de Performances 2024, TD #2, INFO4, Polytech Grenoble</small>"
+author: "Jonatha Anselmi"
+date: "2024-04-04"
+output: html_document
+---
+
+## Size-aware dispatching in two queues
+
+### Problem statement
+
+We consider two heterogeneous G/G/1 queues in parallel.
+When a job arrives, it joins a dispatcher, which sends it to one of the queues instantly.
+The dispatcher can observe the size $S_n$ of each job $n$, and it adopts the following policy: if $S_n\le s$, then it sends the job to queue $1$, otherwise to queue 2. The idea here is to force the separation of long and short jobs and the goal is to find the cutoff size $s$ that minimizes the mean waiting time.
+
+Unfortunately, no exact formula is available for the mean waiting time of the G/G/1 queue in general.
+Given this difficulty, we can approach this problem either by simulation or by analytical approximations.
+In the former case, we rely on Lindley's equation (no need to use [the general code written for the G/G/1 queue](https://rpubs.com/janselmi/GG1_scheduling_disciplines)) while in the latter, we assume that the arrival process is Poisson and rely on the Pollaczek–Khinchine formula. We will assess the accuracy of the approximation given by the Pollaczek–Khinchine formula with respect to the optimal probability computed via simulation.
+
+**Hint: for the simulation part, you can adapt the code of the former session [Response time minimization in two parallel queues](https://rpubs.com/janselmi/RtimeMin)**
+
+### Assumptions
+
+We assume that the service rate at queue $i$ is $\mu_i$ and that the arrival rate is $\lambda$.
+We assume that the job sizes are independent and identically distributed. We let $S$ denote a random variable having the distribution of the job size ($S$ has the same probability distributions of the $S_n$'s).
+For stability, we assume that $\lambda \mathbb{E}[S]<\mu_1+\mu_2$.
+
+### Approximation via Pollaczek–Khinchine formula
+
+Using the Pollaczek–Khinchine formula and the Poisson decomposition property, the mean waiting time of a random job as a function of the cutoff size $s$, say $W=W(s)$, is given by S|S<s
+$$
+W(s) 
+= p W_1(s) + (1-p) W_2(s) 
+= p \times \frac{\lambda p}{2} \frac{ \mathbb{E}[S^2\mid S\le s]/\mu_1^2}{1-\lambda p\mathbb{E}[S\mid S\le s]/\mu_1} + (1-p) \times \frac{\lambda (1-p)}{2} \frac{\mathbb{E}[S^2\mid S>s]/\mu_2^2}{1-\lambda(1-p)\mathbb{E}[S\mid S> s]/\mu_2}
+$$
+where
+$$
+p:=\mathbb{P}(S_n\le s)
+$$
+and we are interested in minimizing $W(s)$ over $s\in[0,S_{\max}]$. 
+This is not trivial to solve analytically but we can always solve it numerically.
+
+When $S$ follows a uniform distribution over $[0,S_{\max}]$, we obtain $p=\frac{s}{S_{\max}}$, $\mathbb{E}[S\mid S<s]=\frac{s}{2}$ and $\mathbb{E}[S^2\mid S<s]= \frac{s^2}{12}+\frac{s^2}{4} = \frac{s^2}{3}$. Substituting in the expression above, this gives
+$$
+W(s) 
+= ...
+$$
+
+
+### Optimization via simulation
+
+For all $n=1,2,\ldots,N$, let $W_{1,n}$ and $W_{2,n}$ denote the waiting times of the $n$-th job joining the system if it is sent to queue 1 and 2, respectively; we can assume $W_{1,n}=W_{2,n}=0$.
+Using Lindley's equation, we obtain
+$$
+W_{1,n+1} = \max \left(W_{1,n} +  \frac{S_n}{\mu_1}\,I_{(S_{n}\le s)} - A_n, \,0 \right)
+$$
+and
+$$
+W_{2,n+1} = \max \left(W_{2,n} +  \frac{S_n}{\mu_2}\,I_{(S_{n}> s)} - A_n, \,0 \right)
+$$
+where $I_E$ is the indicator function of the event $E$, $A_n$ denotes the inter-arrival time between jobs $n$ and $n+1$, and $S_n$ is the job size of job $n$.
+Now, we write a code that iterates over this equation and plots the average waiting time $\frac{1}{N}\sum_{n=1}^N W_n$ as a function of $s$.
+
+```{r, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+LB_random <- function(N,p,mu,InterArrival,JobSize) {      
+
+  WaitingTime=rep(0,2);
+  WaitingTimeCum=rep(0,2);
+  
+  for (n in 1:N) #for each job
+  {
+    # Dispatching decision of RANDOM
+    U = sample(x=1:2,1, prob = c(p,1-p)); 
+    for (k in 1:2) #for each server
+    {
+      # Update the waiting time of server k (Lindley's recursion)
+      WaitingTime[k] = max(WaitingTime[k] + ifelse(U==k,1,0)*JobSize[n]/mu[k] - InterArrival[n], 0);
+      # WaitingTime[k] = max(WaitingTime[k] + (U==k)*JobSize[n]/mu[k] - InterArrival[n], 0);
+    }
+    WaitingTimeCum[U] = WaitingTimeCum[U]+WaitingTime[U];
+  }
+
+ return(sum(WaitingTimeCum)/N);
+}
+
+################################################################################
+N=1e5; # number of jobs to simulate
+set.seed(17); # Set seed for reproducibility
+
+mu = sample(x=1:3, 2, replace = TRUE); # service rates
+mu = c(1,3);
+
+# Job size Scenario 1
+# xm=1; xM=1e3; beta=0.8;
+# JobSize=sample(c(xm,xM),N,replace=T,prob=c(1-1/xM^beta,1/xM^beta)); # Job sizes
+# ES=xm*(1-1/xM^beta) + xM^(1-beta); # Expected value of job sizes
+# ES2=mean(JobSize*JobSize);
+
+# Job size Scenario 2
+JobSize=rexp(N,1); # Job sizes
+ES=1;  # E[S]:   Expected value of job sizes
+ES2=2; # E[S^2]: Second moment of job sizes
+
+rho=0.8; # network load to test: lambda*E[S]/(mu_1+mu_2)
+
+lambda = rho*sum(mu)/ES; # arrival rate
+
+# For stability, we want lambda*p*ES<mu[1] AND lambda*(1-p)*ES<mu[2] 
+# Therefore, p < mu[1]/(ES*lambda) AND p > 1-mu[2]/(lambda*ES)
+p_min=max(0.98*(1-mu[2]/(lambda*ES)),0);
+p_max=min(0.98*(mu[1]/(ES*lambda)),1);
+step=(p_max-p_min)/10;
+p_values=seq(p_min, p_max, step);
+W_RANDOM=rep(NA,length(p_values));
+
+# InterArrival = rexp(n=N, rate = lambda);           # Inter-arrival times: Poisson
+InterArrival = runif(n=N, min = 0, max=2/lambda);    # Inter-arrival times: Uniform
+
+cnt=1;
+for (p in p_values) 
+{
+    W_RANDOM[cnt]=LB_random(N,p,mu,InterArrival,JobSize);
+    cat(paste("Avg Waiting Time (p=", round(p,digits=3), ")=", round(W_RANDOM[cnt],digits=3),sep=""), "\n");
+    cnt=cnt+1;
+}
+
+
+# function to optimize: W(p)
+my_fun=function(p,lambda,mu,ES2) 0.5*ES2*((lambda*p^2)*( (1/mu[1])^2)/(1-lambda*p/mu[1]) + (lambda*(1-p)^2)*((1/mu[2])^2)/(1-lambda*(1-p)/mu[2]))
+res<-optimize(my_fun,lower=p_min,upper=p_max,p,lambda,mu,ES2,maximum=FALSE)
+W_approx=res$objective;
+p_star_approx=res$minimum;
+cat(paste("Optimal waiting time and probability given by the approximation: W*=", 
+    round(W_approx,digits=3), " p*=",round(p_star_approx,digits=3), sep=""), "\n");
+
+
+# plot the results
+plot(p_values, W_RANDOM, xlim=c(p_min,p_max), ylim = c(0, 1.1*mean(W_RANDOM,na.rm = T)),
+     col="blue", lty=1, ylab="",xlab="probability p", type = "b", pch = 19, main=paste("Average Waiting Time W(p)"));
+abline(h = W_approx, col="red", ylab="W*");
+abline(v = p_star_approx, col="red");
+legend("topright",legend=c("Simulation","W_approx"), col=c("blue","red"), pch=c("o","*","+"),lty=c(1,2), ncol=1);
+
+axis(side=1,at=p_star_approx,  labels="p*");
+axis(side=2,at=W_approx,  labels="W*");
+    
+grid(nx = NULL, ny = NULL, lty = 2, col = "lightgray", lwd = 1)
+
+
+```
+
+Even assuming that the interarrival times follow a uniform distribution, from the plot we deduce that *the optimal routing probabilities returned by the approximation and by the simulation are very close to each other* .
+The Poisson approximation seems to work well.
+
+
+
+
+<br><br>
+
+
+
+
+
+
+
+
