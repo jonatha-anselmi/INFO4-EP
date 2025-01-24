@@ -1,0 +1,187 @@
+---
+title: "Scheduling disciplines in the G/G/1 queue with soft deadlines<br><small>Évaluation de Performances 2025, TD #2, INFO4, Polytech Grenoble</small>"
+author: "Jonatha Anselmi"
+date: "2025-01-24"
+output: html_document
+---
+
+### Problem statement
+
+The aim of this session is to be able to simulate and compare the dynamics of a G/G/1 queue adopting a number of scheduling disciplines and where jobs have soft deadlines. Specifically, when a job arrives, it should be completed before a deadline that is specific to the job.
+The deadline is "soft" in the sense it may not be respected, though this wold imply some penalty.
+
+We consider the following scheduling disciplines: 
+
+1. **FCFS**: jobs are processed following the order of their arrival
+    
+2. **EDF** (Earliest Deadline First): jobs are processed according to the earliest deadline with preemption, i.e., the current job is interrupted if a new job with an earlier deadline  arrives.
+    
+3. **EDF-NP** (Earliest Deadline First Non-preemptive): As EDF but jobs are not interrupted once their processing has started.
+
+We are interested in comparing the performance of the previous scheduling disciplines with respect to:
+
+1. **Response Time** (RT): the mean time that a job spends in the system (in the queue and processing phases)
+    
+2. **Missed Deadline Ratio** (MDR): the proportion of jobs that completed after their declared deadline
+    
+3. **Impossible Deadline Ratio** (IDR): the proportion of jobs that declared an impossible deadline, i.e., no discipline can fulfill the deadline requirement in any scenario. This is the case of a job whose service time is larger than its declared deadline.
+
+We adapt [the code for the simulation of the G/G/1 queue](https://rpubs.com/janselmi/GG1_scheduling_disciplines).
+
+We assume a Poisson arrival process, i.e., job interarrival times are independent and exponentially distributed with rate, say, $\lambda$.
+
+### Main code
+
+Here is the main R function that performs the simulation and print the results.
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# This function performs the required simulation.
+# As input, it takes the job service times (Service), their expected value (ES), the job deadlines (relative to the absolute job arrival time), and the system load
+run_simulation <- function(Service, ES, Deadline, rho){
+    debug=0;
+    scheduling_disciplines = c("FCFS",
+                               "EDF");
+    num_arrival_rates=1;
+    lambda = rho/ES;
+    
+    # Matrix of average response times for all disciplines and arrival rates
+    Results <- matrix(0, nrow = length(scheduling_disciplines), ncol = 3);
+    rownames(Results) <- scheduling_disciplines;
+    colnames(Results) <- c("RT", "MDR", "IDR"); # performance metrics
+    
+    # Let's assume a Poisson process coming in, otherwise change the next line
+    Arrival= cumsum(rexp(n=N, rate = lambda)); # Arrival times
+    AbsDeadline = Arrival+Deadline;
+    
+    for (scheduling_discipline in scheduling_disciplines)
+    {
+        t = 0; # simulation time
+        Remaining = rep(N, x=NA);    # Remaining service times of each job
+        Completion = rep(N, x=NA);   # Completion time of each job
+        
+        CurrentTask = NA;
+        NextArrival = 1;
+        while (TRUE) {
+
+if (debug==1){
+    print("*********************");
+    cat("Arrival:     ",Arrival,'\n');
+    cat("AbsDeadline: ",AbsDeadline,'\n');
+    cat("Service:     ",Service,'\n');
+    cat("Remaining:   ",Remaining,'\n');
+}
+            dtA = NA; dtC = NA;
+            if(length(Arrival[Arrival>t])>0) { # if an arrival exists after t
+                dtA = head(Arrival[Arrival>t],n=1)-t ; # time to next arrival
+            }
+            if(!is.na(CurrentTask)) { # if a task is running
+                dtC = Remaining[CurrentTask]; # time to next completion
+            }
+            if(is.na(dtA) & is.na(dtC)) {
+                break;
+            } 
+        
+            dt = min(dtA,dtC,na.rm=T);
+        
+            # update system variables
+            t = t + dt;
+            
+            # Job arrival
+            if((NextArrival <=N) & (Arrival[NextArrival] == t)) {
+                Remaining[NextArrival] = Service[NextArrival];
+                NextArrival = NextArrival + 1;
+            }
+        
+            # Job departure
+            if(!is.na(CurrentTask)) {
+                Remaining[CurrentTask] = Remaining[CurrentTask] - dt;
+                if(Remaining[CurrentTask] <= 0) {
+                    # CurrentTask completed
+                    Completion[CurrentTask] = t;
+                    Remaining[CurrentTask] = NA;
+                    CurrentTask = NA;
+                }
+            }
+            
+            # Scheduling discipline: Let's find the new task to process
+            
+            WaitingList=(1:NextArrival)[!is.na(Remaining)];
+            
+if (debug==1){
+    print(paste("Sim. time:", t));
+    print(paste("# of jobs arrived: ", NextArrival));
+    cat("WaitingList:", WaitingList, "\n");
+}
+            if(length(WaitingList)>0) {
+        
+              if (scheduling_discipline=="FCFS"){
+                CurrentTask = head(WaitingList,n=1);
+              }
+              
+              if (scheduling_discipline=="EDF"){
+                 # Solution 1
+                 # CurrentTask = which(AbsDeadline==min(AbsDeadline[WaitingList]));
+                 # Solution 2
+                  CurrentTask = WaitingList[which.min(AbsDeadline[WaitingList])];
+                 # cat(CurrentTask, " while FCFS says ", head(WaitingList,n=1), '\n');
+              }
+        
+            }
+    
+if (debug==1){
+    print(paste("Current Task = ", CurrentTask))
+    #    readline(prompt="Press [enter] to proceed")
+}
+        
+    } # while
+    
+        IDR=mean(Service>Deadline);
+        MDR=mean(Completion>AbsDeadline);
+        ResponseTime = mean(Completion-Arrival); 
+
+        # Simulation completed.
+        
+        Results[scheduling_discipline,1]=ResponseTime;
+        Results[scheduling_discipline,2]=MDR;
+        Results[scheduling_discipline,3]=IDR;
+        
+        cat(scheduling_discipline," completed.\n");
+    
+    } # loop scheduling discipline
+    
+    cat("\nResults:\n")
+    print(Results)
+    
+} # end function
+
+
+```
+
+### Let's compare the various policies
+
+First, let us consider the case where service times are exponentially distributed (with rate, say, $\mu$) and deadlines are $x=5$ times larger than service times. In this case, note that IDR=0. We obtain:
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = FALSE)
+
+set.seed(11); # Set seed for reproducibility
+
+N = 1e4; # number of jobs to simulate;
+
+mu=1; Service=rexp(N,rate=mu); # Service times
+x=5;  Deadline=Service*x; # Relative deadlines
+
+rho=0.9; # load
+run_simulation(Service, 1/mu, Deadline, rho);
+
+```
+
+
+
+### References
+
+
+
+<br><br>
