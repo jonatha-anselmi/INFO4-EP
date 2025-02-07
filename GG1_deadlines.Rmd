@@ -90,6 +90,7 @@ run_simulation <- function(Service, ES, Deadline, rho){
         
         CurrentTask = NA;
         NextArrival = 1;
+        AvgJobs = 0;
         while (TRUE) {
 
 if (debug==1){
@@ -114,6 +115,7 @@ if (debug==1){
         
             # update system variables
             t = t + dt;
+            AvgJobs=AvgJobs+dt*sum(!is.na(Remaining));
             
             # Job arrival
             if((NextArrival <=N) & (Arrival[NextArrival] == t)) {
@@ -167,7 +169,13 @@ if (debug==1){
         IDR=mean(Service>Deadline);
         MDR=mean(Completion>AbsDeadline);
         ResponseTime = mean(Completion-Arrival); 
+        AvgJobs=AvgJobs/(tail(Completion,n=1)-Arrival[1]);
 
+if (debug==1){
+    cat(paste(" Little law verification: ", round(AvgJobs,digits = 4), "=N=lambda*R=", 
+              round(lambda*ResponseTime,digits = 4),"\n"));
+}        
+        
         # Simulation completed.
         
         Results[scheduling_discipline,1]=ResponseTime;
@@ -205,6 +213,9 @@ run_simulation(Service, 1/mu, Deadline, rho);
 
 ```
 
+Comment results here.
+
+
 ### Scenario 2
 
 In Scenario 2, service times are exponentially distributed with rate $\mu$, and deadlines are independent and exponentially distributed with rate $\gamma=\mu/5$.
@@ -222,6 +233,7 @@ N = 1e4; # number of jobs to simulate;
 ```
 
 
+Comment results here.
 
 
 
