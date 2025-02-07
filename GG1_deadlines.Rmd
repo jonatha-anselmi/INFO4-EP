@@ -5,15 +5,15 @@ date: "2025-01-24"
 output: html_document
 ---
 
-### Problem statement
+## Problem statement
 
 The aim of this session is to be able to simulate and compare the dynamics of a G/G/1 queue adopting a number of scheduling disciplines and where jobs have soft deadlines. Specifically, when a job arrives, it should be completed before a deadline that is specific to the job.
 The deadline is "soft" in the sense it may not be respected, though this wold imply some penalty.
 
 We consider the following scheduling disciplines: 
 
-1. **FCFS**: jobs are processed following the order of their arrival
-    
+1. **FCFS** (First Come First Served): jobs are processed following the order of their arrival
+
 2. **EDF** (Earliest Deadline First): jobs are processed according to the earliest deadline with preemption, i.e., the current job is interrupted if a new job with an earlier deadline  arrives.
     
 3. **EDF-NP** (Earliest Deadline First Non-preemptive): As EDF but jobs are not interrupted once their processing has started.
@@ -21,9 +21,9 @@ We consider the following scheduling disciplines:
 
 We are interested in comparing the performance of the previous scheduling disciplines with respect to:
 
-1. **Response Time** (RT): the mean time that a job spends in the system (in the queue and processing phases)
+1. **Response Time** (RT): the mean time that a job spends in the system (in the queue and processing phases).
     
-2. **Missed Deadline Ratio** (MDR): the proportion of jobs that completed after their declared deadline
+2. **Missed Deadline Ratio** (MDR): the proportion of jobs that completed after their declared deadline.
     
 3. **Impossible Deadline Ratio** (IDR): the proportion of jobs that declared an impossible deadline, i.e., no discipline can fulfill the deadline requirement in any scenario. This is the case of a job whose service time is larger than its declared deadline.
 
@@ -37,7 +37,7 @@ Towards this purpose, the objective is to create a table of the form:
 
 We will rely on this table to comment on the results.
 
-#### Parameter settings
+### Parameter settings
 
 We will consider two parameter settings, referred to as Scenarios 1 and 2.
 Specifically,
@@ -51,13 +51,13 @@ The rate $\lambda$ is such that the system load $\rho=\lambda/\mu$ is 0.9.
 
 
 
-#### Hints
+### Hints
 
 Adapt [the code for the simulation of the G/G/1 queue](https://rpubs.com/janselmi/GG1_scheduling_disciplines).
 
 The R function <code>which.min(v)</code> returns the index of the minimum element in vector <code>v</code>.
 
-### Main code
+## Main code
 
 Here is the main R function that performs the simulation and print the results.
 
@@ -68,8 +68,12 @@ knitr::opts_chunk$set(echo = TRUE)
 # As input, it takes the job service times (Service), their expected value (ES), the job deadlines (relative to the absolute job arrival time), and the system load
 run_simulation <- function(Service, ES, Deadline, rho){
     debug=0;
-    scheduling_disciplines = c("FCFS",
-                               "EDF");
+    scheduling_disciplines = c("EDF",
+                               "EDF-NP",
+                               "SRT2D",
+                               # "EDF-SRPT-D",
+                               # "SRPT",
+                               "FCFS");
     num_arrival_rates=1;
     lambda = rho/ES;
     
@@ -157,6 +161,26 @@ if (debug==1){
                  # cat(CurrentTask, " while FCFS says ", head(WaitingList,n=1), '\n');
               }
         
+              if (scheduling_discipline=="EDF-NP"){
+                  if (is.na(CurrentTask)) {
+                    CurrentTask = WaitingList[which.min(AbsDeadline[WaitingList])];
+                  }
+              }
+
+              if (scheduling_discipline=="SRPT"){
+                    CurrentTask = which.min(Remaining);
+              }
+                
+              if (scheduling_discipline=="SRT2D"){
+                    CurrentTask = WaitingList[which.min(AbsDeadline[WaitingList]-(t+Remaining[WaitingList]))];
+              }
+                
+              if (scheduling_discipline=="EDF-SRPT-D"){
+                  # Set a value for Delta
+                  # Select the waiting jobs that have absolute deadline prior to t+Delta, say Waiting_Delta
+                  # As CurrentTask, choose the job with the shortest remaining processing time in Waiting_Delta.
+              }
+
             }
     
 if (debug==1){
@@ -171,7 +195,7 @@ if (debug==1){
         ResponseTime = mean(Completion-Arrival); 
         AvgJobs=AvgJobs/(tail(Completion,n=1)-Arrival[1]);
 
-if (debug==1){
+if (debug>=0){
     cat(paste(" Little law verification: ", round(AvgJobs,digits = 4), "=N=lambda*R=", 
               round(lambda*ResponseTime,digits = 4),"\n"));
 }        
@@ -194,29 +218,32 @@ if (debug==1){
 
 ```
 
-### Scenario 1
+## Scenario 1
 
 In Scenario 1, service times are exponentially distributed with rate $\mu$  and deadlines are $x=5$ times larger than service times.
 
 ```{r eval=TRUE, include=TRUE}
 knitr::opts_chunk$set(echo = FALSE)
 
-set.seed(11); # Set seed for reproducibility
+set.seed(9); # Set seed for reproducibility
 
 N = 1e4; # number of jobs to simulate;
 
 mu=1; Service=rexp(N,rate=mu); # Service times
-x=5;  Deadline=Service*x; # Relative deadlines
+x=runif(N,3,7);  
+x=5;
+Deadline=Service*x; # Relative deadlines
 
 rho=0.9; # load
 run_simulation(Service, 1/mu, Deadline, rho);
 
 ```
 
-Comment results here.
+In view of the results obtained after several runs (with different seeds), EDF seems to provide the best performance in terms of all three performance indicators.
+This is confirmed also with respect to "perturbed" version of the scenario, where the factor $x$ is replaced by a random variable uniformly distributed over [3,7] and/or the system load $\rho$ changes.
 
 
-### Scenario 2
+## Scenario 2
 
 In Scenario 2, service times are exponentially distributed with rate $\mu$, and deadlines are independent and exponentially distributed with rate $\gamma=\mu/5$.
 
@@ -224,16 +251,38 @@ In Scenario 2, service times are exponentially distributed with rate $\mu$, and 
 ```{r eval=TRUE, include=TRUE}
 knitr::opts_chunk$set(echo = FALSE)
 
-set.seed(11); # Set seed for reproducibility
+set.seed(10); # Set seed for reproducibility
 
 N = 1e4; # number of jobs to simulate;
 
-# TO DO
+mu=1; Service=rexp(N,rate=mu); # Service times
+gamma=mu/5; Deadline=rexp(N,rate=gamma); # Deadlines
+rho=0.9; # load
+run_simulation(Service, 1/mu, Deadline, rho);
 
 ```
 
+In this scenario, we find that all three scheduling disciplines perform equivalently well.
+Therefore, we may opt for FCFS as this scheduling discipline is fairer and does not incur preemption costs.
 
-Comment results here.
+## New scheduling disciplines
+
+Let's think about new scheduling disciplines that may improve over EDF.
+After discussion in class, the following disciplines have been proposed:
+
+1. **SRPT** (Shortest Remaining Processing Time): the job with the shortest remaining processing time is served first.
+
+2. **SRT2D** (Shortest Remaining Time to Deadline): the job with the shortest remaining time to deadline is served first. Note that "the remaining time to deadline" may assume a negative value. This occurs at time $t$ if a job with absolute deadline prior to $t$ exists.
+
+3. **SERT2D** (Shortest Expected Remaining Time to Deadline): as SRT2D but instead of the remaining time to deadline, we consider the *expected remaining time to deadline*.
+
+4. **EDF-SRPT**-$\Delta$: with $\Delta>0$, this scheduling discipline chooses at time $t$ the job with the shortest remaining processing time  among the jobs that have absolute deadlines belonging to the interval $[t,t+\Delta]$.
+
+5. **EDF-SERPT**-$\Delta$: with $\Delta>0$, this scheduling discipline chooses at time $t$ the job with the shortest *expected* remaining processing time among the jobs that have absolute deadlines belonging to the interval $[t,t+\Delta]$.
+
+
+Now, code these disciplines and then run simulations to evaluate their performance.
+
 
 
 
