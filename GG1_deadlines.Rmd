@@ -1,5 +1,5 @@
 ---
-title: "Scheduling disciplines in the G/G/1 queue with soft deadlines<br><small>Évaluation de Performances 2025, TD #2, INFO4, Polytech Grenoble</small>"
+title: "Scheduling disciplines in the G/G/1 queue with soft deadlines<br><small>Évaluation de Performances 2025, TD #2 and #3, INFO4, Polytech Grenoble</small>"
 author: "Jonatha Anselmi"
 date: "2025-01-24"
 output: html_document
@@ -18,6 +18,7 @@ We consider the following scheduling disciplines:
     
 3. **EDF-NP** (Earliest Deadline First Non-preemptive): As EDF but jobs are not interrupted once their processing has started.
 
+
 We are interested in comparing the performance of the previous scheduling disciplines with respect to:
 
 1. **Response Time** (RT): the mean time that a job spends in the system (in the queue and processing phases)
@@ -26,9 +27,35 @@ We are interested in comparing the performance of the previous scheduling discip
     
 3. **Impossible Deadline Ratio** (IDR): the proportion of jobs that declared an impossible deadline, i.e., no discipline can fulfill the deadline requirement in any scenario. This is the case of a job whose service time is larger than its declared deadline.
 
-We adapt [the code for the simulation of the G/G/1 queue](https://rpubs.com/janselmi/GG1_scheduling_disciplines).
+Towards this purpose, the objective is to create a table of the form:
 
-We assume a Poisson arrival process, i.e., job interarrival times are independent and exponentially distributed with rate, say, $\lambda$.
+|Discipline| RT  	|  MDR 	|  IDR 	|
+|:---	|:---	|:---	|:---	|
+|FCFS|   	|   	|   	|
+|EDF|   	|   	|   	|
+|EDF-NP|   	|   	|   	|
+
+We will rely on this table to comment on the results.
+
+#### Parameter settings
+
+We will consider two parameter settings, referred to as Scenarios 1 and 2.
+Specifically,
+
+1. in Scenario 1, assume that service times are exponentially distributed (with rate, say, $\mu$) and deadlines are $x=5$ times larger than service times. In this case, note that IDR=0.
+
+2. in Scenario 2, assume that service times are exponentially distributed (with rate, say, $\mu$) and deadlines are also exponentially distributed with rate $\gamma=\mu/5$. Also, deadlines are independent random variables.
+
+In both scenarios, assume a Poisson arrival process, i.e., job interarrival times are independent and exponentially distributed with rate, say, $\lambda$.
+The rate $\lambda$ is such that the system load $\rho=\lambda/\mu$ is 0.9.
+
+
+
+#### Hints
+
+Adapt [the code for the simulation of the G/G/1 queue](https://rpubs.com/janselmi/GG1_scheduling_disciplines).
+
+The R function <code>which.min(v)</code> returns the index of the minimum element in vector <code>v</code>.
 
 ### Main code
 
@@ -159,9 +186,9 @@ if (debug==1){
 
 ```
 
-### Let's compare the various policies
+### Scenario 1
 
-First, let us consider the case where service times are exponentially distributed (with rate, say, $\mu$) and deadlines are $x=5$ times larger than service times. In this case, note that IDR=0. We obtain:
+In Scenario 1, service times are exponentially distributed with rate $\mu$  and deadlines are $x=5$ times larger than service times.
 
 ```{r eval=TRUE, include=TRUE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -178,9 +205,23 @@ run_simulation(Service, 1/mu, Deadline, rho);
 
 ```
 
+### Scenario 2
+
+In Scenario 2, service times are exponentially distributed with rate $\mu$, and deadlines are independent and exponentially distributed with rate $\gamma=\mu/5$.
 
 
-### References
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = FALSE)
+
+set.seed(11); # Set seed for reproducibility
+
+N = 1e4; # number of jobs to simulate;
+
+# TO DO
+
+```
+
+
 
 
 
