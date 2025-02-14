@@ -1,0 +1,166 @@
+---
+title: "Replication in Computer Systems - DM"
+author: "Jonatha Anselmi"
+date: "February 4, 2020"
+output: html_document
+---
+
+
+<div class="org-src-container" style="background-color:lightblue;">
+<p style="margin: 8px 0px 8px 8px;">
+Votre devoir sera rédigé en français ou en anglais sous forme d'un document HTML généré à l'aide de R/Markdown et publié sur rpubs en prenant soin de bien laisser le code apparent et de fixer la graine de votre générateur à l'aide de la fonction set.seed au tout début du document afin qu’il soit possible de reproduire vos données avec exactitude.
+<br>
+Vous enverrez l'url rpubs de votre devoir par mail à arnaud.legrand AT imag.fr et à jonatha.anselmi AT inria.fr en indiquant dans le sujet [RICM4-EP] DM avant le 14 april à 12h00.
+</p>
+</div>
+
+
+
+
+## Introduction
+
+Nowadays, it is crucial that computer systems respond to interactive users in a few milliseconds. 
+In practice, user requests, or jobs in the following, are subject to a number of factors that increase the variability of response times.
+These include unfortunate disk seek times, background daemons and run-time contention phenomena among CPU cores, processor caches, memory bandwidth, and network bandwidth.
+As a result, some jobs may take significantly longer than expected to complete while keeping blocked resources that could be used by other concurrent interactive jobs.
+This has brought researchers to propose hedge requests, or redundant jobs in the following. The idea consists in <i>replicating a job upon its arrival and use the results from whichever replica responds first</i>. In other words, when a new job arrives, it is replicated to a given number of different servers for processing and as soon as one replica completes or starts service, the response is sent back to the issuing user and the other replicas are canceled. Redundant requests are used by Google's big table services [1].
+
+
+[1] J. Dean and L. A. Barroso. <i>"The Tail at Scale."</i> Commun. ACM 56, 2 (Feb. 2013), 74--80.
+
+
+## Homework assignment
+
+The goal of this homework assignment is i) to write a code in R that simulates the dynamics of redundant jobs in a multiserver platform and ii) to use the code to answer some practical questions. 
+We consider a system of $K$ parallel servers (or queues) adopting the first-come first-served discipline. When a new job arrives, it is replicated to $d$ queues selected uniformly at random <i>without replacement</i> and independently of all else. We assume that the service times of all replicas of all jobs are i.i.d. random variables having the distribution of the random variable $S$ (specified later). We assume that the jobs' interarrival times are independent and have an exponential distribution with rate $\lambda$, i.e., jobs join the system following a Poisson process with rate $\lambda$.
+
+Depending on the assumptions on $S$, we are interested in understanding which one of the following two scenarios is the most convenient:
+
+
+<b>Scenario 1</b>: the remaining copies of each job are canceled as soon as any copy <i>starts</i> service at some server;
+</li>
+<b>Scenario 2</b>: the remaining copies of each job are canceled as soon as any copy <i>completes</i> service at some server.
+
+
+### Step 1: Simulation of redundant jobs
+
+Modify <a href="http://polaris.imag.fr/arnaud.legrand/teaching/2019/RICM4_EP.php#orge330de7" target="new">the code that simulates the dynamics of a G/G/1 queue</a> to simulate $K$ G/G/1 queues  as described above. 
+
+##### System parameters
+<ul  class="org-ul">
+<li> <code>N</code>: number of arriving jobs to simulate (excluding replicas);</li>
+<li> <code>d</code>: number of replicas per job;</li>
+<li> <code>K</code>: number of queues;</li>
+<li> <code>lambda</code>: job arrival rate; </li>
+<li> <code>mu</code>: in the case where $S$ follows an exponential distribution, $\mu=1/\mathbb{E}[S]$ is the job service rate.   </li>
+<li> <code>xm,alpha</code>: in the case where $S$ follows a <a href="https://en.wikipedia.org/wiki/Pareto_distribution" target="new">Pareto distribution</a>, <code>xm</code> resp. <code>alpha</code> is the scale resp. shape parameter. Since common values of <code>alpha</code> found in the empirical studies of computer systems range in the interval $[1,2]$, we assume <code>alpha=1.5</code>.
+</li>
+</ul>
+
+Using the inversion method, note that 
+
+```{r}
+xm=1;
+alpha=1.5;
+xm/(runif(5)^(1/alpha));
+```
+gives a sample associated to 5 i.i.d. Pareto distributed random variables.
+
+
+#### State variables
+
+<ul  class="org-ul">
+<li>  <code>t</code>: simulation time; </li>
+<li> <code>Arrival</code>:  size-$N$ vector of jobs' arrival times;   </li>
+<li> <code>Service</code>: size-$N\times d$ matrix of jobs' service times; </li>
+<li> <code>Queue</code>: size-$N\times d$ matrix indicating where the $i$-th copy of the $n$-th job is dispatched; </li>
+<li> <code>Remaining</code>: size-$N\times d$ matrix indicating the remaining time of the $i$-th copy of the $n$-th job; </li>
+<li> <code>Completion</code>: size-$N$ vector indicating the job's completion time; </li>
+<li> <code>CurrJob</code>: size-$K$ vector indicating the current job in processing at each server, i.e., <code>CurrJob[i]</code> takes value in $\{1,\ldots,N\}$; </li>
+<li> <code>CurrReplica</code>: size-$K$ vector indicating the current replica in processing at each server, i.e., <code>CurrReplica[i]</code> takes value in $\{1,\ldots,d\}$; </li>
+<li><code>NextJob</code>: this variable is incremented by one each time a new job arrives (not necessary but simplifies the code).</li>
+ 
+</ul>
+
+Do not hesitate to introduce other variables if needed.
+
+
+##### Code structure (for both scenarios 1 and 2)
+```{r eval=FALSE, include=TRUE}
+
+while (TRUE) {
+    dtA = ... # time of the next arrival
+    dtC = ... # time of the next completion
+    if(is.na(dtA) & is.na(dtC)) {break;}
+    dt = min(dtA,dtC)
+
+    if((NextArrival <=N) & (Arrival[NextArrival] == t)) 
+    {
+      # update Remaining and, possibly, and other state variables
+    }
+    
+    for(k in 1:K)
+    {
+      if(!is.na(CurrJob[k]))
+      {
+        # update Remaining and, possibly, CurrJob to NA and other state variables
+      }
+    }
+    
+    for(k in 1:K)
+    {
+      if(is.na(CurrJob[k]))
+      {
+        # assign a job and a copy to server k
+        # update state variables
+      }
+    }
+
+}
+```
+
+<br>
+<b>Note for the evaluation</b>: The more efficient the code, the better. Efficiency refers to the ability of simulating an increased number of jobs given a time constraint.
+
+
+### Step 2: Numerical investigation
+
+We call <i>response time</i> the average time that jobs spend in the network.
+Answer the following items distinguishing between the cases where $S$ follows an exponential or Pareto distribution.
+
+#### Question 1
+Assume that <code>d=1</code> and that $S$ has an exponential distribution. Give a formula for the response time.
+
+
+#### Question 2
+
+Assume that <code>N=1e4</code> or higher, <code>d=4</code>, <code>K=10</code> and $\mathbb{E}[S]=1$. Then,
+<ol>
+<li> 
+Plot the response time as a function of <code>lambda</code>, where <code>lambda</code> varies between 0 and $0.95 K /\mathbb{E}[S]$, and verify that it corresponds to the formula given in previous question when <code>d=1</code> and $S$ has an exponential distribution.
+</li>
+<li>
+Is <code>N</code> large enough to make the previous plot representative of the mean time that jobs spend in the network?
+</li>
+</ol>
+
+#### Question 3
+
+Assume that <code>N=1e4</code> or higher, <code>K=10</code>, <code>lambda=0.7*K</code> and $\mathbb{E}[S]=1$. 
+Use your code to investigate under which values of the replication parameter <code>d</code>:
+<ol>
+<li> the system is stable, i.e., the response time does not diverge to infinity as $N\to\infty$.
+</li>
+
+<li> Scenario 1 is better than Scenario 2 (and viceversa).
+</li>
+</ol>
+Explain your numerical investigations providing plots and intuititions that support your conclusions.
+
+
+
+<br>
+<br>
+<br>
+
+

@@ -1,0 +1,171 @@
+---
+title: "Load Balancing - DM"
+author: "Jonatha Anselmi"
+date: "February 25, 2021"
+output: html_document
+---
+
+<div class="org-src-container" style="background-color:lightblue;">
+<p style="margin: 8px 0px 8px 8px;">
+Votre devoir sera rédigé en français ou en anglais sous forme d'un document HTML généré à l'aide de R/Markdown et publié sur rpubs en prenant soin de bien laisser le code apparent et de fixer la graine de votre générateur à l'aide de la fonction set.seed au tout début du document afin qu’il soit possible de reproduire vos données avec exactitude.
+<br>
+Vous enverrez l'url rpubs de votre devoir par mail à jonatha.anselmi AT inria.fr en indiquant dans le sujet [RICM4-EP] DM avant le 14 april à 12h00.
+</p>
+</div>
+
+
+
+
+## Introduction
+
+In multi-server distributed queueing systems, the access of stochastically arriving jobs to resources is often regulated by a dispatcher, also known as load balancer. A fundamental problem consists in designing a load balancing algorithm that minimizes the delays experienced by jobs in the long run.
+
+In this homework assignment, we consider a system composed of two servers working in parallel, each with its own queue. In the following, "queues and "servers" are synonyms. Queues have an infinite buffer and operate under the First-In First-Out (FIFO) scheduling discipline with unitary speed.
+Jobs join the network via an exogenous Poisson process with rate $\lambda$ and are dispatched to queue $i$ according to some dispatching algorithm; see below. 
+The processing, or service, times of all jobs are modelled as independent and identically distributed random variables equal in distribution to some random variable $S$ such that $\mathbb{E}[S]=1$. 
+We assume that $S$ follows a <a href="https://en.wikipedia.org/wiki/Pareto_distribution" target="new">Pareto($s_m,\alpha$) distribution</a> where $s_m$ resp. $\alpha$ is the scale resp. shape parameter. Since common values of $\alpha$ range in the interval $[1,2]$, we let $\alpha=1.5$. On the other hand, $s_m$ is given by the condition $\mathbb{E}[S]=1$.
+Service and inter-arrival times are also assumed mutually independent. 
+After processing, jobs leaves the system and never return.
+
+We are interested in evaluating the performance induced by three dispatching algorithms:
+
+<ul  class="org-ul">
+<li><b>Random (RND)</b>: Upon arrival, each job is dispatched to queue $i$ with probability $1/2$ independently of all else.  </li>
+<li><b>Round-Robin (RR)</b>: Upon arrival, the $n$-th job is sent to queue $1+(n\bmod 2)$.  </li>
+<li><b>Size-Interval Task Allocation (SITA)</b>: Upon arrival, each job is dispatched to queue one if its service time is less than a given threshold $x$ and otherwise to two.   </li>
+</ul>
+
+We are particularly interested in the <i>response time</i>, i.e., the average time that jobs spend in the network.
+In the following, let $R_{RND}$, $R_{RR}$ and $R_{SITA-x}$ denote the response times obtained with the dispatching algorithms above.
+
+
+
+## Homework assignment
+
+The goal of this homework assignment is i) to write a code in R that simulates the dynamics of jobs in the multiserver platform described above and ii) to use the code to investigate some practical questions.
+
+
+### Step 1: Simulation code
+
+Modify <a href="http://polaris.imag.fr/arnaud.legrand/teaching/2019/RICM4_EP.php#orge330de7" target="new">the code that simulates the dynamics of a G/G/1 queue</a> to simulate two parallel G/G/1 queues as described above; just <b>one RMarkdown file</b> simulating all the three dispatching schemes.
+
+
+##### System parameters
+<ul  class="org-ul">
+<li> <code>N</code>: number of arriving jobs to simulate;</li>
+<li> <code>lambda</code>: job arrival rate; </li>
+<li> <code>sm,alpha</code>: the parameters of the <a href="https://en.wikipedia.org/wiki/Pareto_distribution" target="new">Pareto distribution</a>, where <code>sm</code> resp. <code>alpha</code> is the scale resp. shape parameter.</li>
+<li> <code>mu</code>: the average service rate, i.e., $1/\mathbb{E}[S]$. </li>
+<li> <code>x</code>: threshold value for SITA. </li>
+</ul>
+
+Using the inversion method, note that 
+
+```{r}
+N=5;
+sm=1;
+alpha=1.5;
+sm/(runif(N)^(1/alpha));
+```
+gives a sample associated to <code>N</code> i.i.d. Pareto distributed random variables.
+
+
+#### State variables
+
+<ul  class="org-ul">
+<li>  <code>t</code>: simulation time; </li>
+<li> <code>Arrival</code>:  size-$N$ vector of jobs' arrival times;   </li>
+<li> <code>Service</code>: size-$N$ vector of jobs' service times; </li>
+<li> <code>Queue</code>: size-$N$ vector indicating where the jobs are dispatched to; </li>
+<li> <code>Remaining</code>: size-$N$ vector indicating jobs' remaining times; </li>
+<li> <code>Completion</code>: size-$N$ vector indicating jobs' completion times; </li>
+<li> <code>CurrJob</code>: size-$2$ vector indicating the current job in processing at each server, i.e., <code>CurrJob[i]</code>, for $i=1,2$, takes value in $\{1,\ldots,N\}$; </li>
+<li><code>NextJob</code>: this variable is incremented by one each time a new job arrives (not necessary but may simplify the code).</li>
+ 
+</ul>
+
+Do not hesitate to introduce other variables if needed.
+
+
+##### Code structure
+```{r eval=FALSE, include=TRUE}
+
+# Initialize Arrivals, Service, Queue, Remaining and other variables.
+
+while (TRUE) {
+    dtA = ... # time of the next arrival
+    dtC = ... # time of the next completion
+    if(is.na(dtA) & is.na(dtC)) {break;}
+    dt = min(dtA,dtC)
+
+    if((NextArrival <=N) & (Arrival[NextArrival] == t)) 
+    {
+      # update Remaining and, possibly, and other state variables
+    }
+    
+    for(k in 1:2)
+    {
+      if(!is.na(CurrJob[k]))
+      {
+        # update Remaining and, possibly, CurrJob to NA and other state variables
+      }
+    }
+    
+    for(k in 1:2)
+    {
+      if(is.na(CurrJob[k]))
+      {
+        # assign a job and a copy to server k
+        # update state variables
+      }
+    }
+
+}
+```
+
+<br>
+<b>Note for the evaluation</b>: The more efficient the code, the better. Efficiency refers to the ability of simulating an increased number of jobs given a time constraint.
+
+
+### Step 2: Theoretical and numerical investigation
+
+
+#### Question 1
+
+Specify the stability condition induced by RND, RR and SITA, respectively.<br>
+<i>Hint</i>: for RND and SITA, use the Poisson thinning property and for RR, construct the sequence of inter-arrival times at each queue.
+
+
+
+#### Question 2
+
+Plot the response times $R_{RND}$, $R_{RR}$ and $R_{SITA-x}$ as a function of <code>lambda</code>, where <code>lambda</code> varies between 0 and $95$% of the size of the stability region obtained by the corresponding dispatching algorithm; one single figure.
+
+
+<ul  class="org-ul">
+<li>  Choose the threshold <code>x</code> as you believe is more appropriate and make sure that <code>N</code> is large enough to make your plots representative of the mean time that jobs spend in the network. </li>
+<li> Verify that $R_{RR}\le R_{RND}$ for all $\lambda$   </li>
+</ul>
+
+
+
+
+#### Question 3
+
+Assume $\lambda=1.5$. Among RND, RR and SITA, we want to understand which dispatching algorithm provides the best response time.
+Towards this purpose, we want to check whether there exists <code>x</code> such that $R_{SITA-x}\le \min\{R_{RND},R_{RR}\}$.
+Let us call such <code>xstar</code> such <code>x</code>.
+Does <code>xstar</code> exists? If yes, compare the stability region induced by such <code>xstar</code> with the one induced by RND and RR.
+
+
+
+#### Question 4 (Optional)
+
+Propose, and possibly implement, an alternative dispatching scheme that may improve the performance achieved by RR, RND and SITA with <code>x=xstar</code>. Explain your intuition.
+
+
+<br>
+<br>
+<br>
+
+
