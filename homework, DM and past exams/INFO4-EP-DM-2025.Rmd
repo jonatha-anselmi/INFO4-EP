@@ -37,19 +37,20 @@ Extend the R code of the G/G/1 queue linked above to simulate the G/G/1 queue of
 
 1. **FCFS**: jobs are processed following the order of their arrival.
 If a job's deadline expires while it is being processed, the job is removed from the system.
-The server does not know the service time in advance.
+The server does not know the service times in advance.
     
 2. **EDF** (Earliest Deadline First): jobs are processed according to the earliest deadline with preemption, i.e., the current job is interrupted if a new job with an earlier deadline arrives.
-The server does not know the service time in advance.
+The server does not know the service times in advance.
     
 3. **EDF-NP** (Earliest Deadline First Non-preemptive): As EDF but jobs are not interrupted once their processing has started.
-The server does not know the service time in advance.
+The server does not know the service times in advance.
 
 4. **SRPT** (Shortest Remaining Processing Time): the job with the shortest remaining processing time is served first. Here, the jobs whose remaining processing times overflow their corresponding deadlines are not considered, i.e., removed from the system.
 
 5. **SRT2D** (Shortest Remaining Time to Deadline): the job with the shortest remaining time to deadline is served first. Note that "the remaining time to deadline" is always non-negative because jobs that cannot be completed by the deadline are removed from the system. 
 
 6. **SERT2D** (Shortest Expected Remaining Time to Deadline): as SRT2D but instead of the remaining time to deadline, we consider the *expected remaining time to deadline*.
+The server does not know the service times in advance (but it knows their distribution function).
 
 
 
