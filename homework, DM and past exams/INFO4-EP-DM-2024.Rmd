@@ -1,0 +1,46 @@
+---
+title: "Scheduling disciplines for the G/G/$k$ queue - Homework Assignment (DM), Évaluation de Performances, INFO4 Polytech Grenoble"
+author: "ANSELMI Jonatha"
+date: "2024-02-16"
+output: pdf_document
+---
+
+\pagenumbering{gobble}
+
+<div class="org-src-container" style="background-color:lightblue;">
+<p style="margin: 8px 0px 8px 8px;">
+
+> Votre devoir sera rédigé en français ou en anglais sous forme d'un document HTML généré à l'aide de R/Markdown et publié sur rpubs en prenant soin de bien laisser le code apparent et de fixer la graine de votre générateur à l'aide de la fonction set.seed au tout début du document afin qu’il soit possible de reproduire vos données avec exactitude.
+
+> **Vous enverrez l'url rpubs de votre devoir par mail à jonatha.anselmi AT inria.fr <u>avant le 2023-03-31 à 12h00</u>  en indiquant dans le sujet [INFO4-EP] DM.**
+</p>
+</div>
+
+
+### Objective 
+
+The aim of this homework assignment is to be able to simulate and compare the dynamics of a G/G/$k$ queue adopting a number of scheduling disciplines.
+
+The student will rely on the code written in class for simulating the dynamics of the G/G/1 queue, which is available at https://rpubs.com/janselmi/GG1_scheduling_disciplines
+
+### Roadmap
+
+1. Extend the R code of the G/G/1 queue to be able to simulate the G/G/k queue under the scheduling disciplines FCFS, LCFS, ROS and SRPT. 
+2. Take $k=3$. Simulate the dynamics induced by 10 arrivals and provide numerical evidence that your code is correct (using the print command or similar commands).
+3. Now, the goal is to compare the G/G/$k$ queue with a G/G/1 queue having one server that is $k$ times faster. For increasing values of the load (i.e., arrival rate divided by service rate) and $k=5$, plot the ratio between the average response time obtained by a G/G/$k$/FCFS queue and the average response time obtained by a G/G/1/FCFS queue with a server that operates at speed $k$.
+4. Find the value of the ratio defined in the previous point in a limiting regime where the load approaches one from below. Provide some intuition for the obtained value.
+
+### Assumptions
+
+- For the inter-arrival and service times, the student is free to choose the probability distributions of their choice.
+- In the G/G/$k$ queue, it is assumed that each server processes jobs with speed one.
+
+### Notes
+
+Beyond the correctness of the 4 points above, the final note will depend on how the student will make their homework clear. In particular,
+
+- Justify any further assumption made.
+- Add comments in the code to explain what you are doing.
+- Make sure your plots are *robust* (in terms of number of simulated jobs, choices of $k$, etc.).
+
+<br>
