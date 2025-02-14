@@ -1,10 +1,8 @@
 # INFO4-EP: Évaluation de Performances
 
-This is the website for the "Évaluation de Performances" course held at PolyTech INFO4, 2023-2024.
+This website provides resources for the Performance Evaluation ("Évaluation de Performances") course at PolyTech INFO4, 2024-2025.  
 
-[Jonatha Anselmi](mailto:jonatha.anselmi@inria.fr) is in charge of the lectures.
-
-This course is about theory and practice. Much of the content is dedicated to simulation. We will write code in R and to this end, it is recommended to install [RStudio](https://posit.co/download/rstudio-desktop/). Snippets of code written in class are published at this rpubs link: [https://rpubs.com/janselmi](https://rpubs.com/janselmi)
+This course covers both theory and practice, with a strong focus on simulation. We will write code in R, and it is recommended to install [RStudio](https://posit.co/download/rstudio-desktop/) for this purpose. Snippets of code written in class are available at the following RPubs link: [https://rpubs.com/janselmi](https://rpubs.com/janselmi).  
 
 See the [official schedule](https://ade-uga-ro-vs.grenet.fr/direct/index.jsp) with room information.
 
