@@ -2,7 +2,8 @@
 
 This website provides resources for the Performance Evaluation ("Évaluation de Performances") course at PolyTech INFO4, 2024-2025.  
 
-This course covers both theory and practice, with a strong focus on simulation. We will write code in R, and it is recommended to install [RStudio](https://posit.co/download/rstudio-desktop/) for this purpose. Snippets of code written in class are available at the following RPubs link: [https://rpubs.com/janselmi](https://rpubs.com/janselmi).  
+The course is taught by [Jonatha Anselmi](https://polaris.imag.fr/jonatha.anselmi/).
+It covers both theory and practice, with a strong focus on simulation. We will write code in R, and it is recommended to install [RStudio](https://posit.co/download/rstudio-desktop/) for this purpose. Snippets of code written in class are available at the following RPubs link: [https://rpubs.com/janselmi](https://rpubs.com/janselmi).  
 
 See the [official schedule](https://ade-uga-ro-vs.grenet.fr/direct/index.jsp) with room information.
 
