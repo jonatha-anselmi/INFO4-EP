@@ -1,0 +1,83 @@
+---
+title: "Practicing with continuous-time Markov chain and queues<br><small>Évaluation de Performances 2025, TD #6, INFO4, Polytech Grenoble</small>"
+author: "Jonatha Anselmi"
+date: "2025-02-28"
+output: html_document
+---
+
+### Problem statement
+
+The aim of this session is to practice with continuous-time Markov chain and queues in R. We will write some code to simulate the dynamics associated to basic queueing systems.
+
+#### Assumptions
+
+Jobs arrive to the queueing systems following a Poisson process with rate $\lambda$ and their service times are random variables that follow a exponential distribution.
+
+
+### M/M/1
+
+We start by simulating the number of jobs in a M/M/1 queue. To do:
+
+1. Draw the transition diagram on a piece of paper.
+
+2. Plot a sample trajectory of the number of jobs
+
+3. Print the average number of jobs in the systems, say $Q_{sim}$.
+
+4. Compare $Q_{sim}$ with its theoretical formula.
+
+Also, assume that service times have mean $1/\mu$.
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# This function performs the required simulation.
+
+N=1e3; # overall number of events (departure or arrivals)
+
+lambda=0.7; mu=1; # arrival and service rates
+
+state=0; # set the initial state
+Qsim=0;  # average number of jobs in the system
+
+trajectory=c();
+events=c();
+for (i in 1:N) {
+
+    # which events can occur? when?
+    time_2_next_arr=rexp(1,lambda);
+    time_2_next_dep=rexp(1,mu);
+    trajectory=c(trajectory, state);
+    if(state>0) {
+        
+        Qsim=Qsim+min(time_2_next_dep,time_2_next_arr)*state;
+        events=c(events, min(time_2_next_dep,time_2_next_arr));
+        
+        if (time_2_next_dep<time_2_next_arr) {
+            # a departure occurred
+             state=state-1;
+        } else {
+             # an arrival occurred
+             state=state+1;
+        }
+    } else {
+        Qsim=Qsim+time_2_next_arr*state; # useless because state==0
+        events=c(events, time_2_next_arr);
+        state=state+1;    
+    }
+    
+} #for
+
+rho=lambda/mu;
+cat("Average number of jobs (simulation) =  ", Qsim/sum(events),'\n');
+cat("Average number of jobs (theory)     =  ", rho/(1-rho),'\n');
+
+plot(cumsum(events),trajectory, type = 'S')
+```
+
+
+### References
+
+
+
+<br><br>
