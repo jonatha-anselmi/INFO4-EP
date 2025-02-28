@@ -7,11 +7,13 @@ output: html_document
 
 ### Problem statement
 
-The aim of this session is to practice with continuous-time Markov chain and queues in R. We will write some code to simulate the dynamics associated to basic queueing systems.
+The aim of this session is to practice working with continuous-time Markov chains in R. To achieve this, we write code to simulate the dynamics of a basic queueing system.  
+
 
 #### Assumptions
 
-Jobs arrive to the queueing systems following a Poisson process with rate $\lambda$ and their service times are random variables that follow a exponential distribution.
+Arrival to the queueing system follow a Poisson process with rate $\lambda$, and
+job service times are random variables that follow an exponential distribution with rate $\mu$.
 
 
 ### M/M/1
@@ -26,14 +28,13 @@ We start by simulating the number of jobs in a M/M/1 queue. To do:
 
 4. Compare $Q_{sim}$ with its theoretical formula.
 
-Also, assume that service times have mean $1/\mu$.
 
 ```{r eval=TRUE, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 
 # This function performs the required simulation.
 
-N=1e3; # overall number of events (departure or arrivals)
+N=1e5; # overall number of events (departure or arrivals)
 
 lambda=0.7; mu=1; # arrival and service rates
 
@@ -69,15 +70,89 @@ for (i in 1:N) {
 } #for
 
 rho=lambda/mu;
+cat("Load rho = ",rho,"\n");
 cat("Average number of jobs (simulation) =  ", Qsim/sum(events),'\n');
 cat("Average number of jobs (theory)     =  ", rho/(1-rho),'\n');
 
-plot(cumsum(events),trajectory, type = 'S')
+plot(cumsum(events),trajectory, type = 'S', xlab="time", ylab="number of jobs")
+
 ```
 
 
-### References
+### M/M/1 with batches
 
+We consider again the M/M/1 queue but this time we assume that jobs can arrive in pairs, i.e., one job arrives with probability $p$ and two jobs arrive with probability $1-p$ -- note that this is not an M/M/1 queue.
+Again:
 
+1. Draw the transition diagram on a piece of paper.
+
+2. Plot a sample trajectory of the number of jobs
+
+3. Print the average number of jobs in the systems, say $Q_{sim}$.
+
+How does $Q_sim$ compare with the mean number of jobs of an M/M/1 queue with the same arrival and service rates?
+
+```{r eval=TRUE, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# This function performs the required simulation.
+
+N=1e3; # overall number of events (departure or arrivals)
+
+lambda=0.7; mu=1; # arrival and service rates
+p=0.7;
+state=0; # set the initial state
+Qsim=0;  # average number of jobs in the system
+
+trajectory=c();
+events=c();
+for (i in 1:N) {
+
+    # which events can occur? when?
+    time_2_next_arr1=rexp(1,lambda*p);
+    time_2_next_arr2=rexp(1,lambda*(1-p));
+    time_2_next_dep=rexp(1,mu);
+    trajectory=c(trajectory, state);
+    if(state>0) {
+        
+        Qsim=Qsim+min(time_2_next_dep,time_2_next_arr1,time_2_next_arr2)*state;
+        events=c(events, min(time_2_next_dep,time_2_next_arr1,time_2_next_arr2));
+        
+        if (time_2_next_dep<min(time_2_next_arr1,time_2_next_arr2)) {
+            # a departure occurred
+             state=state-1;
+        }
+        if (time_2_next_arr1<min(time_2_next_dep,time_2_next_arr2)) {
+             # one arrival occurred
+             state=state+1;
+        }
+        if (time_2_next_arr2<min(time_2_next_dep,time_2_next_arr1)) {
+             # two arrivals occurred
+             state=state+2;
+        }
+    } else {
+        events=c(events, min(time_2_next_arr1,time_2_next_arr2));
+        
+        if (time_2_next_arr1<time_2_next_arr2) {
+             # one arrival occurred
+             state=state+1;
+        }
+        if (time_2_next_arr2<time_2_next_arr1) {
+             # two arrivals occurred
+             state=state+2;
+        }
+    }
+    
+} #for
+
+rho=lambda*(p+2*(1-p))/mu;
+cat("Average number of jobs (simulation, rho=",rho,") =  ", Qsim/sum(events),'\n');
+
+plot(cumsum(events),trajectory, type = 'S', xlab="time", ylab="number of jobs")
+```
+
+### Homework
+
+Adapt the code above to allow for a more general arrival process, i.e., $k$ jobs arrive with probability $p_k$, for $k=1,\ldots,K$.
 
 <br><br>
