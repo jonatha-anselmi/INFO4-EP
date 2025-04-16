@@ -1,0 +1,198 @@
+% \documentclass[journalpaper, 11pt]{article}
+% \usepackage[paper=letterpaper,centering,margin=1.0in]{geometry}
+
+\documentclass[journalpaper, 12pt]{article}
+\usepackage[paper=letterpaper,centering,margin=0.5in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% \usepackage{mathtools, cuted}
+
+% \usepackage{setspace}
+% \doublespacing
+% \singlespacing
+% \usepackage[colorlinks=true,breaklinks=true,bookmarks=true,urlcolor=blue,     citecolor=blue,linkcolor=blue,bookmarksopen=false,draft=false]{hyperref}
+
+\usepackage[american]{babel}
+\usepackage{epsfig}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amsthm,amsfonts,amsmath,amssymb,amstext,latexsym}
+
+\usepackage{color}
+% \usepackage[notcite,notref]{showkeys}
+
+\pagenumbering{gobble}
+% \usepackage[ruled,vlined]{algorithm2e}
+
+% \usepackage{booktabs}
+
+% \usepackage{mathtools}
+% \mathtoolsset{showonlyrefs}
+
+
+\theoremstyle{definition}
+\allowdisplaybreaks
+\newtheorem{theorem}{Theorem}
+\newtheorem{exercice}{Exercice}
+\newtheorem{question}{Question}
+\newtheorem{remark}{Remark}
+\newtheorem{claim}{Claim}
+\newtheorem{fact}{Fact}
+
+
+\title{
+% INFO4 PS: Contrôle Continu
+% INFO4 PS: Rattrapage Probabilites et Simulation
+INFO4 EP: Examen 10/04/2025.
+Durée: 1h30 (TT+30')
+}
+\author{Jonatha ANSELMI}
+\date{}
+
+
+\begin{document}
+
+\maketitle
+ \vspace{-0.7cm}
+%  ENGLISH BELOW !!!
+
+
+\begin{large}
+
+\ \\
+\noindent
+{\bf Ex. 1.}
+\ \\
+\noindent
+(a) Expliquer ce que dit la loi de Little.
+\ \\
+\noindent
+(b) Écrire l'équation de Lindley en précisant l'interprétation physique de chaque terme.
+\ \\
+\noindent
+(c) Pour une file d’attente M/M/1 avec un taux d’arrivée $\lambda$ et un taux de service $\mu$, fournir une formule pour $\pi(i)$, c’est-à-dire la probabilité stationnaire que le nombre total de tâches soit égal à $i$.
+\ \\
+\noindent
+(d) Considérer la chaîne de Markov en temps continu associée à la file M/M/4 avec un taux d’arrivée $\lambda$ et un taux de service $\mu$. Écrire l’équation de bilan global associée à l’état $4$.
+\ \\
+\noindent
+(e) Quelle propriété rend une chaîne de Markov irréductible ?
+% Une chaîne de Markov dans laquelle chaque état peut être atteint à partir de tout autre état est dite irréductible.
+\ \\
+\noindent
+(f) Pour une chaîne de Markov, qu’est-ce qu’un état absorbant ?
+
+\ \\
+\noindent
+{\bf Ex. 2.}
+Considérer deux files d’attente en parallèle. Lorsqu’une tâche arrive, elle passe par un répartiteur qui l’envoie instantanément vers l’une des deux files.
+Le répartiteur adopte la politique suivante : avec une probabilité $p$, la tâche est envoyée à la file 1, sinon à la file 2.
+On suppose que les arrivées suivent un processus de Poisson.
+On suppose que les tailles des tâches (en bits) suivent une loi exponentielle de paramètre $\mu$.
+On suppose que la vitesse du processeur (en bits/seconde) à la file $i$ est $s_i$, pour $i=1,2$, avec $s_1=1$.
+\ \\
+\noindent
+(a) Quel est le taux de départ des tâches dans la file 1 ?
+\ \\
+\noindent
+(b) Quel est le processus de sortie de la file 1 ? Justifier votre réponse.
+\ \\
+\noindent
+(c) Écrire la condition de stabilité associée à chaque file (en fonction des paramètres d’entrée).
+\ \\
+\noindent
+(d) Écrire une formule pour le temps de réponse moyen $R$.
+\ \\
+\noindent
+(e) Déterminer la valeur de $p$ qui minimise $R$.
+
+\ \\
+\noindent
+{\bf Ex. 3.}
+\ \\
+\noindent
+(a) Écrire un pseudo-code pour l’évolution du nombre de tâches dans une file M/M/1 en temps continu.
+Le code doit simuler l’évolution jusqu’au temps $T$ et, à la fin, afficher le nombre moyen de tâches dans le système.
+\ \\
+\noindent
+(b) Écrire un pseudo-code comme au point (a), sauf que la file considérée est une file M/$H_2(\mu_1,\mu_2,p)$/1.
+Ici, $H_2$ désigne la loi hyper-exponentielle.
+La génération d’un temps de service $S$ suivant la loi $H_2(\mu_1,\mu_2,p)$ se fait comme suit :
+Avec une probabilité $p$, $S$ est une variable aléatoire exponentielle de paramètre $\mu_1$,
+et avec une probabilité $1-p$, $S$ est une variable aléatoire exponentielle de paramètre $\mu_2$.
+
+\end{large}
+
+
+
+
+% \begin{large}
+%
+% \ \\
+% \noindent
+% {\bf Ex. 1.}
+% \ \\
+% \noindent
+% (a) Explain what Little's law says.
+% \ \\
+% \noindent
+% (b) Write Lindley's equation specifing the physical interpretation of each term.
+% \ \\
+% \noindent
+% (c) For an M/M/1 queue with arrival rate $\lambda$ and service rate $\mu$, provide a formula for $\pi(i)$, i.e., the stationary probability that overall number of jobs is $i$.
+% \ \\
+% \noindent
+% (d) Consider the continuous-time Markov chain associated to the M/M/4 queue with arrival rate $\lambda$ and service rate $\mu$. Write the global balance equation associated to state $4$.
+% \ \\
+% \noindent
+% (e) Which property makes a Markov chain irreducible?
+% % A Markov chain in which every state can be reached from every other state is called an irreducible Markov chain.
+% \ \\
+% \noindent
+% (f) For a Markov chain, what is an aborbing state?
+%
+% \ \\
+% \noindent
+% {\bf Ex. 2.}
+% Consider two queues in parallel. When a job arrives, it joins a dispatcher, which sends it to one of the queues instantly.
+% The dispatcher adopts the following policy: with probability p, the job is sent to queue 1, otherwise to queue 2.
+% Assume that jobs arrive following a Poisson process.
+% Assume that job sizes (in bits) have an exponential distribution with rate mu.
+% Assume that processor speed (bits/sec) at queue $i$ is $s_i$, for i=1,2, with $s_1=1$.
+% \ \\
+% \noindent
+% (a) What is the rate at which jobs leave queue 1?
+% \ \\
+% \noindent
+% (b) What is the output process of queue 1? Justify your answer.
+% \ \\
+% \noindent
+% (c) Write the stability condition associated to each queue (as a function of the input parameter).
+% \ \\
+% \noindent
+% (d) Write a formula for the mean response time $R$.
+% \ \\
+% \noindent
+% (e) Find the value of $p$ that minimizes $R$ as a function.
+%
+%
+% \ \\
+% \noindent
+% {\bf Ex. 3.}
+% \ \\
+% \noindent
+% (a) Write a pseudo-code for the evolution of the number of jobs in an M/M/1 queue in continous time.
+% The code must simulate the evolution until time $T$ and, in the end, it must print the average number of jobs in the system.
+% \ \\
+% \noindent
+% (b) Write a pseudo-code as in point (a), except that the queue under invesigation in an M/$H_2(\mu_1,\mu_2,p)$/1 queue.
+% Here, $H_2$ denotes the hyper-exponential distribution.
+% The generation of a service time $S$ that follows the $H_2(\mu_1,\mu_2,p)$ distribution works as follows:
+% With probability $p$, $S$ is given by an exponential random variable with rate $\mu_1$ and
+% with probability $1-p$, $S$ is given by an exponential random variable with rate $\mu_2$.
+%
+% \end{large}
+
+\end{document}
+
+
